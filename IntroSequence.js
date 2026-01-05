@@ -11,7 +11,7 @@
 //    - Init & Display (Line 801)
 //    - Event Handling (Line 850)
 //    - Game State (Line 900)
-//================================================================================
+
 
 //region 1. GLOBAL VARIABLES
 let outputDiv;
@@ -25,6 +25,11 @@ let currentOptions = [];
 let kacper_cooked = false;
 let tongyu_salad_shared = false;
 let euan_salad_told = false;
+let marcus_package_received = false;
+let olivia_orchids_mentioned = false;
+let simon_calculator_seen = false;
+let felix_watched = false;
+let leo_coffee_known = false;
 //endregion
 
 //region 2. SCENES DEFINITION
@@ -299,7 +304,6 @@ const scenes = {
         text: 'Marcus is the mailman. He seems extremely nervous.\n\n',
         options: [
             { text: 'Ask about the mail schedule', nextScene: 'marcus_mail' },
-            { text: 'Ask about suspicious packages', nextScene: 'marcus_packages' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
@@ -310,8 +314,16 @@ const scenes = {
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
-    marcus_packages: {
-        text: 'Marcus mentions a package from overseas arrived 2 weeks ago. It was marked URGENT but he can\'t remember what it contained.\n\n',
+    marcus_package: {
+        text: 'Marcus reluctantly gives you the mysterious overseas package. Inside you find... a receipt from Olivia\'s Flower Shop for "Special Order Orchids." Marcus mentions the package arrived on the same day as the purple orchids!\n\n',
+        options: [
+            { text: 'Ask Marcus about the connection', nextScene: 'marcus_connect' },
+            { text: 'Back to Marcus', nextScene: 'marcus' },
+            { text: 'Back to interrogation room', nextScene: 'intro' }
+        ]
+    },
+    marcus_connect: {
+        text: 'Marcus says he saw Olivia and the florist having a "heated conversation" the day before the murder. He couldn\'t hear what they said, but they both seemed upset. This must mean something!\n\n',
         options: [
             { text: 'Back to Marcus', nextScene: 'marcus' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -399,7 +411,7 @@ const scenes = {
         ]
     },
     simon_calc: {
-        text: 'The calculator is a TI-84 Plus from 2009. Simon mentions this model was discontinued in 2013, which he finds suspicious.\n\n',
+        text: 'The calculator is a TI-84 Plus from 2009. Simon mentions this model was discontinued in 2013, which he finds suspicious. He also mentions he saw Felix the watchmaker intensely studying Simon\'s calculator calculations. Felix seemed very interested in the numbers.\n\n',
         options: [
             { text: 'Back to Simon', nextScene: 'simon' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -516,8 +528,16 @@ const scenes = {
         text: 'Felix is the watch repairman. He keeps checking his watch.\n\n',
         options: [
             { text: 'Ask about watch repairs', nextScene: 'felix_repairs' },
+            { text: 'Ask about Simon\'s calculations', nextScene: 'felix_simon' },
             { text: 'Ask about the time', nextScene: 'felix_time' },
             { text: 'Ask why he keeps checking', nextScene: 'felix_checking' },
+            { text: 'Back to interrogation room', nextScene: 'intro' }
+        ]
+    },
+    felix_simon: {
+        text: 'Felix becomes very nervous. He mentions he saw Simon\'s calculations and realized they matched a time he saw Rachel walking past the house. Rachel, the dog walker with no dogs! The timing was EXACTLY 2 minutes off from his watch. Felix is convinced this is the key to everything.\n\n',
+        options: [
+            { text: 'Back to Felix', nextScene: 'felix' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
@@ -756,11 +776,10 @@ const scenes = {
         ]
     },
     leo: {
-        text: 'Leo is an overworked guy who somehow seems jolly all the time. He\'s grinning ear to ear.\n\n',
+        text: 'Leo is an extremely hard worked guy who somehow seems jolly all the time. He\'s grinning ear to ear and maintains a surprisingly positive energy.\n\n',
         options: [
             { text: 'Ask about his work schedule', nextScene: 'leo_schedule' },
             { text: 'Ask about why he\'s so jolly', nextScene: 'leo_jolly' },
-            { text: 'Ask about coffee consumption', nextScene: 'leo_coffee' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
@@ -772,21 +791,15 @@ const scenes = {
         ]
     },
     leo_jolly: {
-        text: 'Leo explains that despite working himself to exhaustion, he finds joy in every moment. Even discussing your aunt\'s murder makes him smile. He wonders if this might be "suspicious." It might!\n\n',
+        text: 'Leo explains that despite working himself to exhaustion, he finds joy in every moment. Even discussing your aunt\'s murder makes him smile. He wonders if this might be "suspicious." It might! He also mentions seeing Dev in his Santa suit at exactly the same time he was on his break. Dev was caroling. At 3:47 PM. The exact time Marcus delivers mail!\n\n',
         options: [
             { text: 'Back to Leo', nextScene: 'leo' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
-    leo_coffee: {
-        text: 'Leo drinks 47 cups of coffee daily. He\'s very precise about this number. He claims it\'s the exact amount needed to maintain optimal jolliness. His hands are shaking violently.\n\n',
-        options: [
-            { text: 'Back to Leo', nextScene: 'leo' },
-            { text: 'Back to interrogation room', nextScene: 'intro' }
-        ]
-    },
+
     dev: {
-        text: 'Dev is a jolly guy wearing a full Santa suit despite it being January 5th. He\'s thrilled to be interrogated. "HO HO HO!" he exclaims.\n\n',
+        text: 'Dev is a jolly guy wearing a full Santa suit despite it being January 5th. He\'s thrilled to be interrogated. "Ho Ho Dev!" he exclaims.\n\n',
         options: [
             { text: 'Ask about the Santa suit', nextScene: 'dev_suit' },
             { text: 'Ask about his whereabouts', nextScene: 'dev_whereabouts' },
@@ -892,6 +905,9 @@ function displayScene() {
     if (currentScene === 'kacper' && !kacper_cooked) {
         options.splice(2, 0, { text: 'Ask about what he cooked', nextScene: 'kacper_meal' });
     }
+    if (currentScene === 'marcus' && !marcus_package_received) {
+        options.splice(1, 0, { text: 'Get the mysterious package', nextScene: 'marcus_package' });
+    }
     if (currentScene === 'tongyu' && kacper_cooked) {
         options.splice(2, 0, { text: 'Hand her the salad', nextScene: 'tongyu_salad' });
     }
@@ -927,6 +943,9 @@ function handleOptionSelect(option) {
     if (option.nextScene === 'kacper_meal') {
         kacper_cooked = true;
     }
+    if (option.nextScene === 'marcus_package') {
+        marcus_package_received = true;
+    }
     if (option.nextScene === 'tongyu_salad') {
         tongyu_salad_shared = true;
     }
@@ -957,6 +976,11 @@ function restartGame() {
     kacper_cooked = false;
     tongyu_salad_shared = false;
     euan_salad_told = false;
+    marcus_package_received = false;
+    olivia_orchids_mentioned = false;
+    simon_calculator_seen = false;
+    felix_watched = false;
+    leo_coffee_known = false;
     currentScene = 'intro';
     displayScene();
 }
@@ -975,27 +999,6 @@ document.addEventListener('keydown', (event) => {
 
 //endregion FUNCTIONS
 
-//================================================================================
-// QUICK REFERENCE - Scene Keys & Variables
-//================================================================================
-// MAIN SUSPECTS:
-//   - kacper, kacper_alibi, kacper_weapon, kacper_meal
-//   - jane, jane_relationship, jane_day
-//   - tongyu, tongyu_garden, tongyu_activity, tongyu_salad
-//   - herby, herby_car, herby_whereabouts, herby_salad_care
-//   - euan, euan_price, euan_will, euan_salad
-// 
-// STORY SCENES:
-//   - intro (start), accuse (final choice), win (correct), gameover (wrong), restart
-//
-// EXTRA SUSPECTS: marcus, olivia, derek, patricia, simon, rachel, vincent, gloria,
-//   boris, natasha, felix, bethany, leonard, yvonne, malcolm, sophia, gregory,
-//   heather, theodore, millicent, leo, dev, ren_ran
-//
-// GAME STATE VARIABLES:
-//   - kacper_cooked: Set to true when visiting kacper_meal
-//   - tongyu_salad_shared: Set to true when visiting tongyu_salad
-//   - euan_salad_told: Set to true when visiting euan_salad
-//================================================================================
+
 
 window.onload = init;
