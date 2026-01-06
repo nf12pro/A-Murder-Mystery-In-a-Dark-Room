@@ -1098,6 +1098,9 @@ function init() {
     // Initialize settings functionality
     setupSettings();
     
+    // Initialize save slots functionality
+    setupSaveSystem();
+    
     // Initialize achievements functionality
     setupAchievements();
     
@@ -1263,6 +1266,12 @@ function displayScene() {
     clearOutput();
     hideOptions();
     
+    // Stop celebration sound when leaving win scene
+    if (celebrationSound && !celebrationSound.paused && currentScene !== 'win') {
+        celebrationSound.pause();
+        celebrationSound.currentTime = 0;
+    }
+    
     // Auto-save on scene change (except intro) if enabled
     if (currentScene !== 'intro' && autoSaveEnabled) {
         saveGame(true); // true = silent auto-save
@@ -1314,8 +1323,8 @@ function displayScene() {
     
     let textToType = scene.text;
     
-    // Play celebration sound on win
-    if (currentScene === 'win') {
+    // Play celebration sound on win or any accusation scene
+    if (currentScene === 'win' || currentScene.startsWith('accuse_')) {
         if (celebrationSound) {
             celebrationSound.currentTime = 0;
             celebrationSound.play();
@@ -1679,6 +1688,239 @@ function setupNotepad() {
 }
 //endregion
 
+//region SAVE SLOTS SYSTEM
+function setupSaveSystem() {
+    const saveBtn = document.getElementById('saveBtn');
+    const loadBtn = document.getElementById('loadBtn');
+    const savePanel = document.getElementById('savePanel');
+    const loadPanel = document.getElementById('loadPanel');
+    const savePanelClose = document.getElementById('savePanelClose');
+    const loadPanelClose = document.getElementById('loadPanelClose');
+    
+    // Open Save Panel
+    saveBtn.addEventListener('click', () => {
+        playClickSound();
+        document.getElementById('settingsPanel').classList.remove('open');
+        renderSaveSlots();
+        savePanel.classList.add('open');
+    });
+    
+    // Open Load Panel
+    loadBtn.addEventListener('click', () => {
+        playClickSound();
+        document.getElementById('settingsPanel').classList.remove('open');
+        renderLoadSlots();
+        loadPanel.classList.add('open');
+    });
+    
+    // Close Save Panel
+    savePanelClose.addEventListener('click', () => {
+        playClickSound();
+        savePanel.classList.remove('open');
+    });
+    
+    // Close Load Panel
+    loadPanelClose.addEventListener('click', () => {
+        playClickSound();
+        loadPanel.classList.remove('open');
+    });
+    
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            savePanel.classList.remove('open');
+            loadPanel.classList.remove('open');
+        }
+    });
+}
+
+function renderSaveSlots() {
+    const container = document.getElementById('saveSlotsList');
+    container.innerHTML = '';
+    
+    for (let i = 1; i <= 5; i++) {
+        const slotContainer = document.createElement('div');
+        slotContainer.style.cssText = 'display: flex; gap: 8px; width: 100%;';
+        
+        const btn = document.createElement('button');
+        btn.className = 'slot-btn';
+        btn.type = 'button';
+        btn.style.flex = '1';
+        const saveData = localStorage.getItem(`saveSlot_${i}`);
+        
+        if (saveData) {
+            try {
+                const save = JSON.parse(saveData);
+                const date = new Date(save.saveDate);
+                const progress = save.visitedScenes ? save.visitedScenes.length : 0;
+                const achievements = save.achievementCount || 0;
+                btn.innerHTML = `<div class="slot-name">💾 Slot ${i}</div><div class="slot-info">${date.toLocaleDateString()} ${date.toLocaleTimeString()}</div><div class="slot-info">👥 ${progress}/30 characters • 🏆 ${achievements}/34 achievements</div>`;
+                
+                // Delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'slot-delete-btn';
+                deleteBtn.type = 'button';
+                deleteBtn.innerHTML = '🗑️';
+                deleteBtn.title = 'Delete this save';
+                const slotNum = i;
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (confirm(`Delete Slot ${slotNum}?`)) {
+                        playClickSound();
+                        localStorage.removeItem(`saveSlot_${slotNum}`);
+                        renderSaveSlots();
+                        showNotification(`Slot ${slotNum} deleted`, '#ff4444');
+                    }
+                });
+                slotContainer.appendChild(deleteBtn);
+            } catch (e) {
+                btn.innerHTML = `<div class="slot-name">📭 Slot ${i}</div><div class="slot-info">Empty</div>`;
+                btn.classList.add('empty');
+            }
+        } else {
+            btn.innerHTML = `<div class="slot-name">📭 Slot ${i}</div><div class="slot-info">Empty</div>`;
+            btn.classList.add('empty');
+        }
+        
+        const slotNum = i;
+        btn.addEventListener('click', function() {
+            playClickSound();
+            saveToSlot(slotNum);
+        });
+        
+        slotContainer.insertBefore(btn, slotContainer.firstChild);
+        container.appendChild(slotContainer);
+    }
+}
+
+function renderLoadSlots() {
+    const container = document.getElementById('loadSlotsList');
+    container.innerHTML = '';
+    
+    // Auto-save slot
+    const autoSaveData = localStorage.getItem('gameState');
+    const autoBtn = document.createElement('button');
+    autoBtn.className = 'slot-btn';
+    autoBtn.type = 'button';
+    
+    if (autoSaveData) {
+        try {
+            const save = JSON.parse(autoSaveData);
+            const progress = save.visitedScenes ? save.visitedScenes.length : 0;
+            const achievements = save.achievementCount || 0;
+            autoBtn.innerHTML = `<div class="slot-name">⚡ Auto-Save</div><div class="slot-info">👥 ${progress}/30 characters • 🏆 ${achievements}/34 achievements</div>`;
+            autoBtn.addEventListener('click', function() {
+                playClickSound();
+                loadFromSlot(null);
+            });
+        } catch (e) {
+            autoBtn.innerHTML = `<div class="slot-name">⚡ Auto-Save</div><div class="slot-info">No auto-save</div>`;
+            autoBtn.classList.add('empty');
+            autoBtn.disabled = true;
+        }
+    } else {
+        autoBtn.innerHTML = `<div class="slot-name">⚡ Auto-Save</div><div class="slot-info">No auto-save</div>`;
+        autoBtn.classList.add('empty');
+        autoBtn.disabled = true;
+    }
+    container.appendChild(autoBtn);
+    
+    // Manual save slots
+    for (let i = 1; i <= 5; i++) {
+        const slotContainer = document.createElement('div');
+        slotContainer.style.cssText = 'display: flex; gap: 8px; width: 100%;';
+        
+        const btn = document.createElement('button');
+        btn.className = 'slot-btn';
+        btn.type = 'button';
+        btn.style.flex = '1';
+        const saveData = localStorage.getItem(`saveSlot_${i}`);
+        
+        if (saveData) {
+            try {
+                const save = JSON.parse(saveData);
+                const date = new Date(save.saveDate);
+                const progress = save.visitedScenes ? save.visitedScenes.length : 0;
+                const achievements = save.achievementCount || 0;
+                btn.innerHTML = `<div class="slot-name">💾 Slot ${i}</div><div class="slot-info">${date.toLocaleDateString()} ${date.toLocaleTimeString()}</div><div class="slot-info">👥 ${progress}/30 characters • 🏆 ${achievements}/34 achievements</div>`;
+                const slotNum = i;
+                btn.addEventListener('click', function() {
+                    playClickSound();
+                    loadFromSlot(slotNum);
+                });
+                
+                // Delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'slot-delete-btn';
+                deleteBtn.type = 'button';
+                deleteBtn.innerHTML = '🗑️';
+                deleteBtn.title = 'Delete this save';
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (confirm(`Delete Slot ${slotNum}?`)) {
+                        playClickSound();
+                        localStorage.removeItem(`saveSlot_${slotNum}`);
+                        renderLoadSlots();
+                        showNotification(`Slot ${slotNum} deleted`, '#ff4444');
+                    }
+                });
+                slotContainer.appendChild(deleteBtn);
+            } catch (e) {
+                btn.innerHTML = `<div class="slot-name">📭 Slot ${i}</div><div class="slot-info">Empty</div>`;
+                btn.classList.add('empty');
+                btn.disabled = true;
+            }
+        } else {
+            btn.innerHTML = `<div class="slot-name">📭 Slot ${i}</div><div class="slot-info">Empty</div>`;
+            btn.classList.add('empty');
+            btn.disabled = true;
+        }
+        
+        slotContainer.insertBefore(btn, slotContainer.firstChild);
+        container.appendChild(slotContainer);
+    }
+}
+
+
+function saveToSlot(slotNumber) {
+    saveGame(false, slotNumber);
+    renderSaveSlots();
+    showNotification(`✓ Saved to Slot ${slotNumber}!`, '#48c774');
+}
+
+function loadFromSlot(slotNumber) {
+    loadGame(slotNumber);
+    document.getElementById('loadPanel').classList.remove('open');
+    showNotification(slotNumber ? `✓ Loaded Slot ${slotNumber}!` : '✓ Loaded Auto-Save!', '#667eea');
+}
+
+function showNotification(message, color) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${color};
+        color: #fff;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 16px;
+        z-index: 10000;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        font-family: 'PT Sans', sans-serif;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 2000);
+}
+//endregion
+
 //region 3.5 SETTINGS FUNCTIONALITY
 function setupSettings() {
     const settingsBtn = document.getElementById('settingsBtn');
@@ -1686,7 +1928,6 @@ function setupSettings() {
     const settingsClose = document.getElementById('settingsClose');
     const sfxVolumeSlider = document.getElementById('sfxVolume');
     const sfxVolumeValue = document.getElementById('sfxVolumeValue');
-    const manageSavesBtn = document.getElementById('manageSavesBtn');
     const resetGameBtn = document.getElementById('resetGameBtn');
     const autoSaveToggle = document.getElementById('autoSaveToggle');
     
@@ -1717,13 +1958,6 @@ function setupSettings() {
         clickSound.volume = volume * 0.3; // Click very soft
         sfxVolumeValue.textContent = event.target.value + '%';
         localStorage.setItem('sfxVolume', event.target.value);
-    });
-    
-    // Manage save slots button
-    manageSavesBtn.addEventListener('click', () => {
-        playClickSound();
-        settingsPanel.classList.remove('open');
-        openSaveSlotsPanel();
     });
     
     // Reset game button
@@ -2028,6 +2262,19 @@ function showAchievementNotification(message) {
     }, 4000);
 }
 
+function countUnlockedAchievements() {
+    let count = 0;
+    if (achievements.openedNotepad) count++;
+    if (achievements.openedBrowser) count++;
+    if (achievements.completedProgressBar) count++;
+    if (achievements.accusedAllCharacters) count++;
+    // Count character accusations
+    Object.keys(achievements.accused || {}).forEach(char => {
+        if (achievements.accused[char]) count++;
+    });
+    return count;
+}
+
 function saveGame(silent = false, slotNumber = null) {
     const gameState = {
         currentScene: currentScene,
@@ -2039,6 +2286,7 @@ function saveGame(silent = false, slotNumber = null) {
         felix_watched: felix_watched,
         leo_coffee_known: leo_coffee_known,
         visitedScenes: Array.from(visitedScenes),
+        achievementCount: countUnlockedAchievements(),
         saveDate: new Date().toISOString()
     };
     
