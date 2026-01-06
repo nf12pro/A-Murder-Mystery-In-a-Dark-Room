@@ -1469,10 +1469,8 @@ function setupSettings() {
     const settingsBtn = document.getElementById('settingsBtn');
     const settingsPanel = document.getElementById('settingsPanel');
     const settingsClose = document.getElementById('settingsClose');
-    const typewriterVolumeSlider = document.getElementById('typewriterVolume');
-    const typewriterVolumeValue = document.getElementById('typewriterVolumeValue');
-    const celebrationVolumeSlider = document.getElementById('celebrationVolume');
-    const celebrationVolumeValue = document.getElementById('celebrationVolumeValue');
+    const sfxVolumeSlider = document.getElementById('sfxVolume');
+    const sfxVolumeValue = document.getElementById('sfxVolumeValue');
     const saveGameBtn = document.getElementById('saveGameBtn');
     const resetGameBtn = document.getElementById('resetGameBtn');
     
@@ -1493,20 +1491,13 @@ function setupSettings() {
         }
     });
     
-    // Typewriter volume control
-    typewriterVolumeSlider.addEventListener('input', (event) => {
+    // SFX volume control
+    sfxVolumeSlider.addEventListener('input', (event) => {
         const volume = event.target.value / 100;
-        typewriterSound.volume = volume;
-        typewriterVolumeValue.textContent = event.target.value + '%';
-        localStorage.setItem('typewriterVolume', event.target.value);
-    });
-    
-    // Celebration volume control
-    celebrationVolumeSlider.addEventListener('input', (event) => {
-        const volume = event.target.value / 100;
+        typewriterSound.volume = volume * 0.6; // Typewriter slightly quieter
         celebrationSound.volume = volume;
-        celebrationVolumeValue.textContent = event.target.value + '%';
-        localStorage.setItem('celebrationVolume', event.target.value);
+        sfxVolumeValue.textContent = event.target.value + '%';
+        localStorage.setItem('sfxVolume', event.target.value);
     });
     
     // Save game button
@@ -1532,22 +1523,20 @@ function setupSettings() {
 }
 
 function loadSettings() {
-    // Load typewriter volume
-    const savedTypewriterVolume = localStorage.getItem('typewriterVolume');
-    if (savedTypewriterVolume !== null) {
-        const volume = parseInt(savedTypewriterVolume) / 100;
-        typewriterSound.volume = volume;
-        document.getElementById('typewriterVolume').value = savedTypewriterVolume;
-        document.getElementById('typewriterVolumeValue').textContent = savedTypewriterVolume + '%';
-    }
-    
-    // Load celebration volume
-    const savedCelebrationVolume = localStorage.getItem('celebrationVolume');
-    if (savedCelebrationVolume !== null) {
-        const volume = parseInt(savedCelebrationVolume) / 100;
+    // Load SFX volume
+    const savedSfxVolume = localStorage.getItem('sfxVolume');
+    const sfxVolumeSlider = document.getElementById('sfxVolume');
+    const sfxVolumeValue = document.getElementById('sfxVolumeValue');
+    if (savedSfxVolume !== null) {
+        const volume = parseInt(savedSfxVolume) / 100;
+        typewriterSound.volume = volume * 0.6;
         celebrationSound.volume = volume;
-        document.getElementById('celebrationVolume').value = savedCelebrationVolume;
-        document.getElementById('celebrationVolumeValue').textContent = savedCelebrationVolume + '%';
+        if (sfxVolumeSlider) sfxVolumeSlider.value = savedSfxVolume;
+        if (sfxVolumeValue) sfxVolumeValue.textContent = savedSfxVolume + '%';
+    } else {
+        // Default 50%
+        typewriterSound.volume = 0.3;
+        celebrationSound.volume = 0.5;
     }
     
     // Load OpenDyslexic font setting
@@ -2258,6 +2247,7 @@ function setupNotepadTools() {
 let ttsEnabled = false;
 let ttsVoice = null;
 let ttsSpeed = 1.0;
+let ttsVolume = 1.0;
 let speechSynth = window.speechSynthesis;
 let currentUtterance = null;
 
@@ -2265,9 +2255,12 @@ function setupTextToSpeech() {
     const ttsToggle = document.getElementById('ttsToggle');
     const ttsVoiceSection = document.getElementById('ttsVoiceSection');
     const ttsSpeedSection = document.getElementById('ttsSpeedSection');
+    const ttsVolumeSection = document.getElementById('ttsVolumeSection');
     const ttsVoiceSelect = document.getElementById('ttsVoiceSelect');
     const ttsSpeedSlider = document.getElementById('ttsSpeed');
     const ttsSpeedValue = document.getElementById('ttsSpeedValue');
+    const ttsVolumeSlider = document.getElementById('ttsVolume');
+    const ttsVolumeValue = document.getElementById('ttsVolumeValue');
     
     if (!ttsToggle || !speechSynth) return;
     
@@ -2282,15 +2275,30 @@ function setupTextToSpeech() {
         ttsSpeedValue.textContent = ttsSpeed.toFixed(1) + 'x';
     }
     
+    const savedVolume = localStorage.getItem('ttsVolume');
+    if (savedVolume) {
+        ttsVolume = parseFloat(savedVolume);
+        ttsVolumeSlider.value = ttsVolume * 100;
+        ttsVolumeValue.textContent = Math.round(ttsVolume * 100) + '%';
+    }
+    
     // Show/hide TTS options based on toggle
     if (ttsEnabled) {
         ttsVoiceSection.style.display = 'block';
         ttsSpeedSection.style.display = 'block';
+        ttsVolumeSection.style.display = 'block';
     }
     
-    // Populate voice list
+    // Flag to prevent multiple voice population
+    let voicesPopulated = false;
+    
+    // Populate voice list - all English voices
     function populateVoices() {
         const voices = speechSynth.getVoices();
+        if (voices.length === 0) return; // Wait for voices to load
+        if (voicesPopulated) return; // Only populate once
+        
+        voicesPopulated = true;
         ttsVoiceSelect.innerHTML = '';
         
         // Filter for English voices
@@ -2304,11 +2312,14 @@ function setupTextToSpeech() {
             ttsVoiceSelect.appendChild(option);
         });
         
+        // Store voices for later use
+        ttsVoiceSelect.voices = voicesToUse;
+        
         // Load saved voice
         const savedVoice = localStorage.getItem('ttsVoice');
-        if (savedVoice && voicesToUse[savedVoice]) {
+        if (savedVoice && voicesToUse[parseInt(savedVoice)]) {
             ttsVoiceSelect.value = savedVoice;
-            ttsVoice = voicesToUse[savedVoice];
+            ttsVoice = voicesToUse[parseInt(savedVoice)];
         } else if (voicesToUse.length > 0) {
             ttsVoice = voicesToUse[0];
         }
@@ -2328,20 +2339,22 @@ function setupTextToSpeech() {
         if (ttsEnabled) {
             ttsVoiceSection.style.display = 'block';
             ttsSpeedSection.style.display = 'block';
+            ttsVolumeSection.style.display = 'block';
         } else {
             ttsVoiceSection.style.display = 'none';
             ttsSpeedSection.style.display = 'none';
+            ttsVolumeSection.style.display = 'none';
             stopSpeaking();
         }
     });
     
     // Voice selection handler
     ttsVoiceSelect.addEventListener('change', () => {
-        const voices = speechSynth.getVoices();
-        const englishVoices = voices.filter(v => v.lang.startsWith('en'));
-        const voicesToUse = englishVoices.length > 0 ? englishVoices : voices;
-        ttsVoice = voicesToUse[ttsVoiceSelect.value];
-        localStorage.setItem('ttsVoice', ttsVoiceSelect.value);
+        const voices = ttsVoiceSelect.voices;
+        if (voices && voices[ttsVoiceSelect.value]) {
+            ttsVoice = voices[ttsVoiceSelect.value];
+            localStorage.setItem('ttsVoice', ttsVoiceSelect.value);
+        }
     });
     
     // Speed slider handler
@@ -2349,6 +2362,13 @@ function setupTextToSpeech() {
         ttsSpeed = ttsSpeedSlider.value / 10;
         ttsSpeedValue.textContent = ttsSpeed.toFixed(1) + 'x';
         localStorage.setItem('ttsSpeed', ttsSpeed);
+    });
+    
+    // Volume slider handler
+    ttsVolumeSlider.addEventListener('input', () => {
+        ttsVolume = ttsVolumeSlider.value / 100;
+        ttsVolumeValue.textContent = Math.round(ttsVolume * 100) + '%';
+        localStorage.setItem('ttsVolume', ttsVolume);
     });
 }
 
@@ -2373,7 +2393,7 @@ function speakText(text) {
     currentUtterance = new SpeechSynthesisUtterance(cleanText);
     currentUtterance.rate = ttsSpeed;
     currentUtterance.pitch = 1;
-    currentUtterance.volume = 1;
+    currentUtterance.volume = ttsVolume;
     
     if (ttsVoice) {
         currentUtterance.voice = ttsVoice;

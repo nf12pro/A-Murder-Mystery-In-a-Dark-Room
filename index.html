@@ -762,16 +762,9 @@
         
         <div class="settings-section">
             <label class="settings-label">
-                Typewriter SFX Volume: <span class="settings-value" id="typewriterVolumeValue">30%</span>
+                🔊 SFX Volume: <span class="settings-value" id="sfxVolumeValue">50%</span>
             </label>
-            <input type="range" min="0" max="100" value="30" class="settings-slider" id="typewriterVolume">
-        </div>
-        
-        <div class="settings-section">
-            <label class="settings-label">
-                Celebration SFX Volume: <span class="settings-value" id="celebrationVolumeValue">50%</span>
-            </label>
-            <input type="range" min="0" max="100" value="50" class="settings-slider" id="celebrationVolume">
+            <input type="range" min="0" max="100" value="50" class="settings-slider" id="sfxVolume">
         </div>
         
         <div class="settings-section">
@@ -799,6 +792,13 @@
                 Speech Speed: <span class="settings-value" id="ttsSpeedValue">1.0x</span>
             </label>
             <input type="range" min="5" max="15" value="10" class="settings-slider" id="ttsSpeed">
+        </div>
+        
+        <div class="settings-section" id="ttsVolumeSection" style="display: none;">
+            <label class="settings-label">
+                Speech Volume: <span class="settings-value" id="ttsVolumeValue">100%</span>
+            </label>
+            <input type="range" min="0" max="100" value="100" class="settings-slider" id="ttsVolume">
         </div>
         
         <div class="settings-section">
