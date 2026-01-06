@@ -348,7 +348,7 @@
         #achievementsBtn {
             position: fixed;
             top: 20px;
-            right: 80px;
+            left: 20px;
             width: 50px;
             height: 50px;
             background-color: #2a2240;
@@ -442,12 +442,25 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: transparent;
-            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
             color: #fff;
-            font-size: 30px;
+            font-size: 24px;
             cursor: pointer;
-            padding: 5px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+        #achievementsClose:hover {
+            transform: scale(1.15);
+            background: rgba(255, 107, 107, 0.8);
+            border-color: #ff6b6b;
         }
         #achievementsTitle {
             font-size: 24px;
@@ -911,14 +924,23 @@
         </div>
         
         <div class="settings-section">
-            <button class="settings-button success" id="saveGameBtn">💾 Save Game</button>
+            <button class="settings-button" id="manageSavesBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 100%;">💾 Manage Save Slots</button>
             <button class="settings-button danger" id="resetGameBtn">🔄 Reset Game</button>
+        </div>
+    </div>
+    
+    <!-- Save Slots Panel -->
+    <div id="saveSlotsPanel" class="panel" style="display: none;">
+        <div style="position: absolute; top: 15px; right: 15px; width: 30px; height: 30px; background-color: #ff4444; border: 2px solid #fff; border-radius: 50%; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 9999;" id="saveSlotsClose">✕</div>
+        <div style="font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center;">💾 Save Slots</div>
+        <div id="saveSlotsList" style="max-height: 500px; overflow-y: auto;">
+            <!-- Save slots will be populated here -->
         </div>
     </div>
     
     <!-- Achievements Panel -->
     <div id="achievementsPanel" class="panel">
-        <button id="achievementsClose">×</button>
+        <div id="achievementsCloseBtn" style="position: absolute; top: 15px; right: 15px; width: 30px; height: 30px; background-color: #ff4444; border: 2px solid #fff; border-radius: 50%; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 9999;">✕</div>
         <div id="achievementsTitle">🏆 Achievements</div>
         <div id="achievementsList" style="max-height: 500px; overflow-y: auto; padding: 10px;">
             <!-- Achievements will be populated here -->

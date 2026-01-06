@@ -1686,7 +1686,7 @@ function setupSettings() {
     const settingsClose = document.getElementById('settingsClose');
     const sfxVolumeSlider = document.getElementById('sfxVolume');
     const sfxVolumeValue = document.getElementById('sfxVolumeValue');
-    const saveGameBtn = document.getElementById('saveGameBtn');
+    const manageSavesBtn = document.getElementById('manageSavesBtn');
     const resetGameBtn = document.getElementById('resetGameBtn');
     const autoSaveToggle = document.getElementById('autoSaveToggle');
     
@@ -1719,14 +1719,11 @@ function setupSettings() {
         localStorage.setItem('sfxVolume', event.target.value);
     });
     
-    // Save game button
-    saveGameBtn.addEventListener('click', () => {
+    // Manage save slots button
+    manageSavesBtn.addEventListener('click', () => {
         playClickSound();
-        saveGame();
-        saveGameBtn.textContent = '✓ Game Saved!';
-        setTimeout(() => {
-            saveGameBtn.textContent = '💾 Save Game';
-        }, 2000);
+        settingsPanel.classList.remove('open');
+        openSaveSlotsPanel();
     });
     
     // Reset game button
@@ -1806,20 +1803,26 @@ function loadSettings() {
 function setupAchievements() {
     const achievementsBtn = document.getElementById('achievementsBtn');
     const achievementsPanel = document.getElementById('achievementsPanel');
-    const achievementsClose = document.getElementById('achievementsClose');
+    const achievementsClose = document.getElementById('achievementsCloseBtn');
     
-    // Open achievements
+    // Toggle achievements
     achievementsBtn.addEventListener('click', () => {
         playClickSound();
-        achievementsPanel.classList.add('open');
-        renderAchievements();
+        if (achievementsPanel.classList.contains('open')) {
+            achievementsPanel.classList.remove('open');
+        } else {
+            achievementsPanel.classList.add('open');
+            renderAchievements();
+        }
     });
     
     // Close achievements
-    achievementsClose.addEventListener('click', () => {
-        playClickSound();
-        achievementsPanel.classList.remove('open');
-    });
+    if (achievementsClose) {
+        achievementsClose.addEventListener('click', () => {
+            playClickSound();
+            achievementsPanel.classList.remove('open');
+        });
+    }
     
     // Close on Escape key
     document.addEventListener('keydown', (event) => {
@@ -1968,7 +1971,7 @@ function showAchievementNotification(message) {
     notification.style.cssText = `
         position: fixed;
         top: 80px;
-        right: 20px;
+        left: 20px;
         background: linear-gradient(135deg, #ffd700, #ffed4e);
         color: #000;
         padding: 15px 20px;
@@ -1977,7 +1980,7 @@ function showAchievementNotification(message) {
         font-size: 16px;
         box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
         z-index: 10000;
-        animation: slideIn 0.5s ease-out;
+        animation: slideInLeft 0.5s ease-out;
         font-family: 'PT Sans', sans-serif;
     `;
     notification.textContent = message;
@@ -1985,9 +1988,9 @@ function showAchievementNotification(message) {
     // Add animation
     const style = document.createElement('style');
     style.textContent = `
-        @keyframes slideIn {
+        @keyframes slideInLeft {
             from {
-                transform: translateX(400px);
+                transform: translateX(-400px);
                 opacity: 0;
             }
             to {
@@ -1995,13 +1998,13 @@ function showAchievementNotification(message) {
                 opacity: 1;
             }
         }
-        @keyframes slideOut {
+        @keyframes slideOutLeft {
             from {
                 transform: translateX(0);
                 opacity: 1;
             }
             to {
-                transform: translateX(400px);
+                transform: translateX(-400px);
                 opacity: 0;
             }
         }
@@ -2018,14 +2021,14 @@ function showAchievementNotification(message) {
     
     // Remove after 4 seconds
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.5s ease-in';
+        notification.style.animation = 'slideOutLeft 0.5s ease-in';
         setTimeout(() => {
             document.body.removeChild(notification);
         }, 500);
     }, 4000);
 }
 
-function saveGame(silent = false) {
+function saveGame(silent = false, slotNumber = null) {
     const gameState = {
         currentScene: currentScene,
         kacper_cooked: kacper_cooked,
@@ -2035,18 +2038,25 @@ function saveGame(silent = false) {
         simon_calculator_seen: simon_calculator_seen,
         felix_watched: felix_watched,
         leo_coffee_known: leo_coffee_known,
-        visitedScenes: Array.from(visitedScenes)
+        visitedScenes: Array.from(visitedScenes),
+        saveDate: new Date().toISOString()
     };
     
-    localStorage.setItem('gameState', JSON.stringify(gameState));
+    if (slotNumber !== null) {
+        localStorage.setItem(`saveSlot_${slotNumber}`, JSON.stringify(gameState));
+    } else {
+        // Auto-save or legacy save
+        localStorage.setItem('gameState', JSON.stringify(gameState));
+    }
     
     if (!silent) {
-        console.log('Game saved!');
+        console.log('Game saved!' + (slotNumber !== null ? ` (Slot ${slotNumber})` : ''));
     }
 }
 
-function loadGame() {
-    const savedState = localStorage.getItem('gameState');
+function loadGame(slotNumber = null) {
+    const key = slotNumber !== null ? `saveSlot_${slotNumber}` : 'gameState';
+    const savedState = localStorage.getItem(key);
     if (savedState) {
         try {
             const gameState = JSON.parse(savedState);
@@ -2063,7 +2073,10 @@ function loadGame() {
             // Update progress bar after loading
             updateProgressBar();
             
-            console.log('Game loaded!');
+            // Display the loaded scene
+            displayScene();
+            
+            console.log('Game loaded!' + (slotNumber !== null ? ` (Slot ${slotNumber})` : ''));
         } catch (e) {
             console.error('Failed to load game:', e);
         }
@@ -2074,6 +2087,7 @@ function resetGame() {
     // Clear all game state
     localStorage.removeItem('gameState');
     localStorage.removeItem('detectiveNotes');
+    localStorage.removeItem('achievements');
     
     // Reset variables
     currentScene = 'intro';
@@ -2085,6 +2099,15 @@ function resetGame() {
     felix_watched = false;
     leo_coffee_known = false;
     visitedScenes = new Set();
+    
+    // Reset achievements
+    achievements = {
+        openedNotepad: false,
+        openedBrowser: false,
+        completedProgressBar: false,
+        accusedAllCharacters: false,
+        accused: {}
+    };
     
     // Clear notepad (now a contenteditable div, not textarea)
     document.getElementById('notepadText').innerHTML = '';
