@@ -28,6 +28,19 @@ let currentTypingCallback = null;
 let buttonsAnimating = false;
 let autoSaveEnabled = true;
 let autoSaveInterval = null;
+let achievements = {
+    openedNotepad: false,
+    openedBrowser: false,
+    completedProgressBar: false,
+    accusedAllCharacters: false,
+    accused: {} // Will store {characterName: true} for each accused character
+};
+const CHARACTER_NAMES = [
+    'Marcus', 'Tongyu', 'Derek', 'Kacper', 'Patricia', 'Simon', 'Jane',
+    'Rachel', 'Vincent', 'Herby', 'Gloria', 'Boris', 'Natasha', 'Felix', 'Euan',
+    'Bethany', 'Leonard', 'Yvonne', 'Malcolm', 'Sophia', 'Gregory', 'Heather',
+    'Theodore', 'Millicent', 'Leo', 'Dev', 'Ren Ran', 'Rayane', 'Alex', 'Reem'
+];
 
 // Game state variables
 let kacper_cooked = false;
@@ -1085,6 +1098,9 @@ function init() {
     // Initialize settings functionality
     setupSettings();
     
+    // Initialize achievements functionality
+    setupAchievements();
+    
     // Initialize browser functionality
     setupBrowser();
     
@@ -1255,6 +1271,47 @@ function displayScene() {
     // Stop any ongoing speech
     stopSpeaking();
     
+    // Track character accusation achievements
+    if (currentScene.startsWith('accuse_')) {
+        const characterMap = {
+            'accuse_marcus': 'Marcus',
+            'accuse_tongyu': 'Tongyu',
+            'accuse_derek': 'Derek',
+            'accuse_kacper': 'Kacper',
+            'accuse_patricia': 'Patricia',
+            'accuse_simon': 'Simon',
+            'accuse_jane': 'Jane',
+            'accuse_rachel': 'Rachel',
+            'accuse_vincent': 'Vincent',
+            'accuse_herby': 'Herby',
+            'accuse_gloria': 'Gloria',
+            'accuse_boris': 'Boris',
+            'accuse_natasha': 'Natasha',
+            'accuse_felix': 'Felix',
+            'accuse_euan': 'Euan',
+            'accuse_bethany': 'Bethany',
+            'accuse_leonard': 'Leonard',
+            'accuse_yvonne': 'Yvonne',
+            'accuse_malcolm': 'Malcolm',
+            'accuse_sophia': 'Sophia',
+            'accuse_gregory': 'Gregory',
+            'accuse_heather': 'Heather',
+            'accuse_theodore': 'Theodore',
+            'accuse_millicent': 'Millicent',
+            'accuse_leo': 'Leo',
+            'accuse_dev': 'Dev',
+            'accuse_renran': 'Ren Ran',
+            'accuse_rayane': 'Rayane',
+            'accuse_alex': 'Alex',
+            'accuse_reem': 'Reem'
+        };
+        
+        const characterName = characterMap[currentScene];
+        if (characterName) {
+            unlockAchievement('accuseCharacter', characterName);
+        }
+    }
+    
     let textToType = scene.text;
     
     // Play celebration sound on win
@@ -1423,6 +1480,48 @@ function handleOptionSelect(option) {
     // Update progress bar
     updateProgressBar();
     
+    // Track accusation achievements
+    if (option.nextScene.startsWith('accuse_')) {
+        // Extract character name from scene ID
+        const sceneToName = {
+            'accuse_marcus': 'Marcus',
+            'accuse_tongyu': 'Tongyu',
+            'accuse_derek': 'Derek',
+            'accuse_kacper': 'Kacper',
+            'accuse_patricia': 'Patricia',
+            'accuse_simon': 'Simon',
+            'accuse_jane': 'Jane',
+            'accuse_rachel': 'Rachel',
+            'accuse_vincent': 'Vincent',
+            'accuse_herby': 'Herby',
+            'accuse_gloria': 'Gloria',
+            'accuse_boris': 'Boris',
+            'accuse_natasha': 'Natasha',
+            'accuse_felix': 'Felix',
+            'accuse_euan': 'Euan',
+            'accuse_bethany': 'Bethany',
+            'accuse_leonard': 'Leonard',
+            'accuse_yvonne': 'Yvonne',
+            'accuse_malcolm': 'Malcolm',
+            'accuse_sophia': 'Sophia',
+            'accuse_gregory': 'Gregory',
+            'accuse_heather': 'Heather',
+            'accuse_theodore': 'Theodore',
+            'accuse_millicent': 'Millicent',
+            'accuse_leo': 'Leo',
+            'accuse_dev': 'Dev',
+            'accuse_renran': 'Ren Ran',
+            'accuse_rayane': 'Rayane',
+            'accuse_alex': 'Alex',
+            'accuse_reem': 'Reem'
+        };
+        
+        const characterName = sceneToName[option.nextScene];
+        if (characterName) {
+            unlockAchievement('accuseCharacter', characterName);
+        }
+    }
+    
     if (option.nextScene === 'kacper_meal') {
         kacper_cooked = true;
     }
@@ -1549,6 +1648,7 @@ function setupNotepad() {
         playClickSound();
         notepadContainer.style.display = 'block';
         notepadText.focus();
+        unlockAchievement('notepad');
     });
     
     // Close notepad
@@ -1701,6 +1801,228 @@ function loadSettings() {
     
     // Setup Text-to-Speech
     setupTextToSpeech();
+}
+
+function setupAchievements() {
+    const achievementsBtn = document.getElementById('achievementsBtn');
+    const achievementsPanel = document.getElementById('achievementsPanel');
+    const achievementsClose = document.getElementById('achievementsClose');
+    
+    // Open achievements
+    achievementsBtn.addEventListener('click', () => {
+        playClickSound();
+        achievementsPanel.classList.add('open');
+        renderAchievements();
+    });
+    
+    // Close achievements
+    achievementsClose.addEventListener('click', () => {
+        playClickSound();
+        achievementsPanel.classList.remove('open');
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && achievementsPanel.classList.contains('open')) {
+            achievementsPanel.classList.remove('open');
+        }
+    });
+    
+    // Load achievements from localStorage
+    const savedAchievements = localStorage.getItem('achievements');
+    if (savedAchievements) {
+        try {
+            achievements = JSON.parse(savedAchievements);
+        } catch (e) {
+            console.error('Failed to load achievements:', e);
+        }
+    }
+}
+
+function renderAchievements() {
+    const achievementsList = document.getElementById('achievementsList');
+    let html = '';
+    
+    // Special achievements
+    const specialAchievements = [
+        {
+            id: 'openedNotepad',
+            icon: '📝',
+            name: 'Note Taker',
+            desc: 'Open the notepad',
+            unlocked: achievements.openedNotepad
+        },
+        {
+            id: 'openedBrowser',
+            icon: '🌐',
+            name: 'Cyber Sleuth',
+            desc: 'Open the browser',
+            unlocked: achievements.openedBrowser
+        },
+        {
+            id: 'completedProgressBar',
+            icon: '⭐',
+            name: 'Social Butterfly',
+            desc: 'Talk to all 30 characters',
+            unlocked: achievements.completedProgressBar
+        },
+        {
+            id: 'accusedAllCharacters',
+            icon: '🎯',
+            name: 'Trial and Error',
+            desc: 'Accuse every single character at least once',
+            unlocked: achievements.accusedAllCharacters
+        }
+    ];
+    
+    // Add special achievements
+    specialAchievements.forEach(ach => {
+        const unlockedClass = ach.unlocked ? 'unlocked' : '';
+        html += `
+            <div class="achievement ${unlockedClass}">
+                <div class="achievement-icon">${ach.icon}</div>
+                <div class="achievement-info">
+                    <div class="achievement-name">${ach.name}</div>
+                    <div class="achievement-desc">${ach.desc}</div>
+                </div>
+            </div>
+        `;
+    });
+    
+    // Character accusation achievements
+    html += '<div style="margin-top: 20px; font-weight: bold; font-size: 18px;">Character Accusations:</div>';
+    CHARACTER_NAMES.forEach(name => {
+        const unlocked = achievements.accused[name] || false;
+        const unlockedClass = unlocked ? 'unlocked' : '';
+        html += `
+            <div class="achievement ${unlockedClass}">
+                <div class="achievement-icon">🔍</div>
+                <div class="achievement-info">
+                    <div class="achievement-name">Accused ${name}</div>
+                    <div class="achievement-desc ${unlocked ? '' : 'achievement-locked'}">
+                        ${unlocked ? `You accused ${name}` : 'Not yet accused'}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    achievementsList.innerHTML = html;
+    
+    // Calculate and display unlock count
+    let totalUnlocked = 0;
+    if (achievements.openedNotepad) totalUnlocked++;
+    if (achievements.openedBrowser) totalUnlocked++;
+    if (achievements.completedProgressBar) totalUnlocked++;
+    if (achievements.accusedAllCharacters) totalUnlocked++;
+    totalUnlocked += Object.keys(achievements.accused).length;
+    
+    const total = 34; // 4 special + 30 character accusations
+    document.getElementById('achievementsTitle').textContent = `Achievements (${totalUnlocked}/${total})`;
+}
+
+function unlockAchievement(type, characterName = null) {
+    let unlocked = false;
+    let message = '';
+    
+    if (type === 'notepad' && !achievements.openedNotepad) {
+        achievements.openedNotepad = true;
+        unlocked = true;
+        message = '🏆 Achievement Unlocked: Note Taker!';
+    } else if (type === 'browser' && !achievements.openedBrowser) {
+        achievements.openedBrowser = true;
+        unlocked = true;
+        message = '🏆 Achievement Unlocked: Cyber Sleuth!';
+    } else if (type === 'progressBar' && !achievements.completedProgressBar) {
+        achievements.completedProgressBar = true;
+        unlocked = true;
+        message = '🏆 Achievement Unlocked: Social Butterfly!';
+    } else if (type === 'accuseCharacter' && characterName) {
+        if (!achievements.accused[characterName]) {
+            achievements.accused[characterName] = true;
+            unlocked = true;
+            message = `🏆 Achievement Unlocked: Accused ${characterName}!`;
+            
+            // Check if all characters have been accused
+            if (Object.keys(achievements.accused).length === 30 && !achievements.accusedAllCharacters) {
+                achievements.accusedAllCharacters = true;
+                setTimeout(() => {
+                    showAchievementNotification('🏆 Achievement Unlocked: Trial and Error!');
+                }, 2000);
+            }
+        }
+    }
+    
+    if (unlocked) {
+        // Save achievements
+        localStorage.setItem('achievements', JSON.stringify(achievements));
+        
+        // Show notification
+        showAchievementNotification(message);
+    }
+}
+
+function showAchievementNotification(message) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        color: #000;
+        padding: 15px 20px;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+        z-index: 10000;
+        animation: slideIn 0.5s ease-out;
+        font-family: 'PT Sans', sans-serif;
+    `;
+    notification.textContent = message;
+    
+    // Add animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(notification);
+    
+    // Play celebration sound
+    if (celebrationSound) {
+        celebrationSound.currentTime = 0;
+        celebrationSound.play();
+    }
+    
+    // Remove after 4 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.5s ease-in';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 500);
+    }, 4000);
 }
 
 function saveGame(silent = false) {
@@ -2133,6 +2455,7 @@ function setupBrowser() {
         if (history.length === 0) {
             loadHomepage();
         }
+        unlockAchievement('browser');
     });
     
     // Close browser
@@ -2221,6 +2544,11 @@ function updateProgressBar() {
     
     progressCount.textContent = `${count}/${total}`;
     progressFill.style.width = `${percentage}%`;
+    
+    // Check if all characters questioned
+    if (count === 30) {
+        unlockAchievement('progressBar');
+    }
 }
 //endregion
 
