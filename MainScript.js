@@ -1428,6 +1428,8 @@ function displayScene() {
             celebrationSound.currentTime = 0;
             celebrationSound.play();
         }
+        // Reset dialogue repetitions when accusing someone
+        dialogueRepetitions = {};
     }
     
     if (currentScene === 'intro') {
@@ -2345,12 +2347,6 @@ function showAchievementNotification(message) {
     document.head.appendChild(style);
     
     document.body.appendChild(notification);
-    
-    // Play celebration sound
-    if (celebrationSound) {
-        celebrationSound.currentTime = 0;
-        celebrationSound.play();
-    }
     
     // Remove after 4 seconds
     setTimeout(() => {
