@@ -107,7 +107,7 @@ const scenes = {
         ]
     },
     kacper_alibi: {
-        text: 'Kacper says he was in the kitchen all day preparing dinner.\n\n',
+        text: 'Kacper says he was in the kitchen all day ordering salad from Glovo because he can\'t cook.\n\n',
         options: [
             { text: 'Ask about the murder weapon', nextScene: 'kacper_weapon' },
             { text: 'Back to Kacper', nextScene: 'kacper' },
@@ -115,7 +115,7 @@ const scenes = {
         ]
     },
     kacper_weapon: {
-        text: 'Kacper claims he doesn\'t know anything about the knife found at the scene.\n\n',
+        text: 'Kacper claims he doesn\'t know anything about the knife from the kitchen found at the scene.\n\n',
         options: [
             { text: 'Ask about his alibi', nextScene: 'kacper_alibi' },
             { text: 'Back to Kacper', nextScene: 'kacper' },
@@ -123,7 +123,7 @@ const scenes = {
         ]
     },
     kacper_meal: {
-        text: 'Kacper gives you the salad he cooked.\n\n',
+        text: 'Kacper gives you the tomato salad he ordered from Glovo.\n\n',
         options: [
             { text: 'Ask about his alibi', nextScene: 'kacper_alibi' },
             { text: 'Back to Kacper', nextScene: 'kacper' },
@@ -159,7 +159,7 @@ const scenes = {
     //endregion
     //region Tongyu Scenes
     tongyu: {
-        text: 'Tongyu is the gardener. She\'s been with the family for years.\n\n',
+        text: 'Tongyu is the gardener obsessed with salad.. She\'s been with the family for years.\n\n',
         options: [
             { text: 'Ask about the garden', nextScene: 'tongyu_garden' },
             { text: 'Ask about suspicious activity', nextScene: 'tongyu_activity' },
@@ -167,7 +167,7 @@ const scenes = {
         ]
     },
         tongyu_garden: {
-            text: 'Tongyu says the garden is doing good and that the plants are growing well.\n\n',
+            text: 'Tongyu says the garden is doing good and that the plants are growing, however the vegetables look like they haven\'t been watered for 67 years.\n\n',
             options: [
                 { text: 'Ask about suspicious activity', nextScene: 'tongyu_activity' },
                 { text: 'Back to Tongyu', nextScene: 'tongyu' },
@@ -193,16 +193,16 @@ const scenes = {
     //endregion
     //region Herby Scenes
     herby: {
-        text: 'Herby is the chaffeur. He looks worried.\n\n',
+        text: 'Herby is the chaffeur who lost his job as a healer. She looks worried.\n\n',
         options: [
             { text: 'Ask about the car', nextScene: 'herby_car' },
-            { text: 'Ask about his whereabouts', nextScene: 'herby_whereabouts' },
+            { text: 'Ask about her whereabouts', nextScene: 'herby_whereabouts' },
             { text: 'Ask why he\'s not a healer', nextScene: 'herby_healer' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
         herby_car: {
-            text: 'Herby says the car is a deluxe supreme Apple iCar Pro 17+ with an orange colored exterior.\n\n',
+            text: 'Herby says the car is a deluxe supreme Apple iCar Pro 17+ with an orange colored exterior that looks like a traffic cone.\n\n',
             options: [
                 { text: 'Ask about his whereabouts', nextScene: 'herby_whereabouts' },
                 { text: 'Ask about why he cared about the salad ingredients', nextScene: 'herby_salad_care' },
@@ -212,21 +212,21 @@ const scenes = {
             ]
         },
         herby_whereabouts: {
-            text: 'Herby claims he drove the car to get the ingredients for the salad.\n\n',
+            text: 'Herby claims she drove the car to get the ingredients for the salad at .\n\n',
             options: [
                 { text: 'Ask about the car', nextScene: 'herby_car' },
-                { text: 'Ask about why he cared about the salad ingredients', nextScene: 'herby_salad_care' }, 
-                { text: 'Ask why he\'s not a healer', nextScene: 'herby_healer' },
+                { text: 'Ask about why she cared about the salad ingredients', nextScene: 'herby_salad_care' }, 
+                { text: 'Ask why she\'s not a healer', nextScene: 'herby_healer' },
                 { text: 'Back to Herby', nextScene: 'herby' },
                 { text: 'Back to interrogation room', nextScene: 'intro' }
             ]
         },
         herby_healer: {
-            text: 'Herby says he wanted to be a healer, but the LORE did not allow it.\n\n',
+            text: 'Herby says she wanted to be a healer, but the LORE did not allow it.\n\n',
             options: [
                 { text: 'Ask about the car', nextScene: 'herby_car' },
-                { text: 'Ask about his whereabouts', nextScene: 'herby_whereabouts' },
-                { text: 'Ask about why he cared about the salad ingredients', nextScene: 'herby_salad_care' },
+                { text: 'Ask about her whereabouts', nextScene: 'herby_whereabouts' },
+                { text: 'Ask about why she cared about the salad ingredients', nextScene: 'herby_salad_care' },
                 { text: 'Back to Herby', nextScene: 'herby' },
                 { text: 'Back to interrogation room', nextScene: 'intro' }
             ]
@@ -235,8 +235,8 @@ const scenes = {
             text: 'Herby says that Euan was pressuring him to get them as fast as possible.\n\n',
             options: [
                 { text: 'Ask about the car', nextScene: 'herby_car' },
-                { text: 'Ask about his whereabouts', nextScene: 'herby_whereabouts'},
-                { text: 'Ask why he\'s not a healer', nextScene: 'herby_healer' },
+                { text: 'Ask about her whereabouts', nextScene: 'herby_whereabouts'},
+                { text: 'Ask why she\'s not a healer', nextScene: 'herby_healer' },
                 { text: 'Back to Herby', nextScene: 'herby' },
                 { text: 'Back to interrogation room', nextScene: 'intro' }
             ]
@@ -245,7 +245,7 @@ const scenes = {
     //endregion
     //region Euan Scenes
     euan: {
-        text: 'Euan is the salesman. He\'s very formal and composed.\n\n',
+        text: 'Euan is William Daniel, now trying to reform and become an honest salesman guy. He\'s very formal and composed.\n\n',
         options: [
             { text: 'Ask about the price of the household', nextScene: 'euan_price' },
             { text: 'Ask about what you got in your will', nextScene: 'euan_will' },
@@ -262,7 +262,7 @@ const scenes = {
             ]
         },
         euan_will: {
-            text: 'Euan looks at you straight in the eyes as if he was staring into your soul and says: \"A depressed crow.\"\n\n',
+            text: 'Euan looks at you straight in the eyes as if he was staring into your soul and says: \"A depressed crow. AND HACKCLUB MERCH YAY!!!\"\n\n',
             options: [
                 { text: 'Ask about the price of the household', nextScene: 'euan_price' },
                 { text: 'Ask about his favorite type of salad', nextScene: 'euan_salad' },
@@ -497,7 +497,7 @@ const scenes = {
         ]
     },
     derek_water: {
-        text: 'The pool water was exactly 2.7 inches lower than regulation. Derek seems to think this is a CRUCIAL detail.\n\n',
+        text: 'The pool water was exactly 6.7 inches lower than regulation. Derek seems to think this is a CRUCIAL detail.\n\n',
         options: [
             { text: 'Ask about pool chemicals', nextScene: 'derek_chemicals' },
             { text: 'Ask about his tan', nextScene: 'derek_tan' },
@@ -965,26 +965,31 @@ const scenes = {
         ]
     },
     leo: {
-        text: 'Leo is an extremely hard worked guy who somehow seems jolly all the time. He\'s grinning ear to ear and maintains a surprisingly positive energy.\n\n',
+        text: 'Leo is just a guy who \'hates everyone\' For some reason wearing a high-vis vest inside and arguing with Fed-Ex.\n\n',
         options: [
             { text: 'Ask about his work schedule', nextScene: 'leo_schedule' },
             { text: 'Ask about why he\'s so jolly', nextScene: 'leo_jolly' },
+            { text: 'Ask about his 11 year old pictures', nextScene: 'leo_pictures' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     leo_schedule: {
-        text: 'Leo works 16 hours a day, 6 days a week. He has 2 hours of sleep, yet somehow maintains his cheerful demeanor. He claims his smile comes from genuine appreciation for life and the people around him. It\'s actually kind of impressive. He once saw Herby the chef frantically driving to three different grocery stores and thought "that guy needs to learn to relax."\n\n',
+        text: 'Leo works 20 hours a day, 7 days a week. He has 2 hours of sleep, yet somehow maintains his cheerful demeanor. He claims his smile comes from genuine appreciation for life and the people around him. It\'s actually kind of impressive. He once saw Herby the chef frantically driving to three different grocery stores and thought "that guy needs to learn to relax."\n\n',
         options: [
-            { text: 'Ask about why he\'s so jolly', nextScene: 'leo_jolly' },
-            { text: 'Back to Leo', nextScene: 'leo' },
+            { text: 'Ask about his 11 year old pictures', nextScene: 'leo_pictures' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     leo_jolly: {
         text: 'Leo explains that despite working hard, he finds joy in every moment and tries to spread that positivity to others. He was actually at home on the day of the murder, preparing a nice dinner for some friends. He mentions it was at the same time Dev was out caroling the neighborhood with Christmas spirit.\n\n',
         options: [
-            { text: 'Ask about his work schedule', nextScene: 'leo_schedule' },
-            { text: 'Back to Leo', nextScene: 'leo' },
+            { text: 'Ask about his 11 year old pictures', nextScene: 'leo_pictures' },
+            { text: 'Back to interrogation room', nextScene: 'intro' }
+        ]
+    },
+    leo_pictures: {
+        text: 'Leo deletes all the pictures posted in Slack and threatens to ban you.\n',
+        options: [
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
