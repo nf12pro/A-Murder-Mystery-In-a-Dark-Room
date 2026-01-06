@@ -1541,6 +1541,27 @@ function loadSettings() {
         document.getElementById('celebrationVolume').value = savedCelebrationVolume;
         document.getElementById('celebrationVolumeValue').textContent = savedCelebrationVolume + '%';
     }
+    
+    // Load OpenDyslexic font setting
+    const dyslexicFontEnabled = localStorage.getItem('dyslexicFont') === 'true';
+    const dyslexicToggle = document.getElementById('dyslexicFontToggle');
+    if (dyslexicToggle) {
+        dyslexicToggle.checked = dyslexicFontEnabled;
+        if (dyslexicFontEnabled) {
+            document.body.classList.add('dyslexic-font');
+        }
+        
+        // Add toggle handler
+        dyslexicToggle.addEventListener('change', () => {
+            if (dyslexicToggle.checked) {
+                document.body.classList.add('dyslexic-font');
+                localStorage.setItem('dyslexicFont', 'true');
+            } else {
+                document.body.classList.remove('dyslexic-font');
+                localStorage.setItem('dyslexicFont', 'false');
+            }
+        });
+    }
 }
 
 function saveGame() {
