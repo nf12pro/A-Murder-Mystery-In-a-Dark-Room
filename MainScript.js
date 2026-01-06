@@ -1,6 +1,4 @@
-//================================================================================
-// MURDER MYSTERY IN A DARK ROOM - Game Script
-//================================================================================
+// MIGNITH MURDER MYSTERY IN A DARK ROOM - Game Script
 // TABLE OF CONTENTS:
 // 1. GLOBAL VARIABLES (Line 8)
 // 2. SCENES DEFINITION (Line 18)
@@ -73,7 +71,8 @@ const scenes = {
             { text: 'Leo', nextScene: 'leo' },
             { text: 'Dev', nextScene: 'dev' },
             { text: 'Ren Ran', nextScene: 'ren_ran' },
-            { text: 'Rayane', nextScene: 'rayane' }
+            { text: 'Rayane', nextScene: 'rayane' },
+            { text: 'Alex', nextScene: 'alex' }
         ]
     //endregion
     },
@@ -264,53 +263,159 @@ const scenes = {
     accuse: {
         text: 'Who do you accuse of murdering your aunt?\n\n',
         options: [
-            { text: 'Marcus', nextScene: 'gameover' },
-            { text: 'Tongyu', nextScene: 'gameover' },
-            { text: 'Olivia', nextScene: 'gameover' },
-            { text: 'Derek', nextScene: 'gameover' },
-            { text: 'Kacper', nextScene: 'gameover' },
-            { text: 'Patricia', nextScene: 'gameover' },
-            { text: 'Simon', nextScene: 'gameover' },
-            { text: 'Jane', nextScene: 'gameover' },
-            { text: 'Rachel', nextScene: 'gameover' },
-            { text: 'Vincent', nextScene: 'gameover' },
-            { text: 'Herby', nextScene: 'gameover' },
-            { text: 'Gloria', nextScene: 'gameover' },
-            { text: 'Boris', nextScene: 'gameover' },
-            { text: 'Natasha', nextScene: 'gameover' },
-            { text: 'Felix', nextScene: 'gameover' },
-            { text: 'Euan', nextScene: 'win' },
-            { text: 'Bethany', nextScene: 'gameover' },
-            { text: 'Leonard', nextScene: 'gameover' },
-            { text: 'Yvonne', nextScene: 'gameover' },
-            { text: 'Malcolm', nextScene: 'gameover' },
-            { text: 'Sophia', nextScene: 'gameover' },
-            { text: 'Gregory', nextScene: 'gameover' },
-            { text: 'Heather', nextScene: 'gameover' },
-            { text: 'Theodore', nextScene: 'gameover' },
-            { text: 'Millicent', nextScene: 'gameover' },
-            { text: 'Leo', nextScene: 'gameover' },
-            { text: 'Dev', nextScene: 'gameover' },
-            { text: 'Ren Ran', nextScene: 'gameover' },
-            { text: 'Rayane', nextScene: 'bonus' },
+            { text: 'Marcus', nextScene: 'accuse_marcus' },
+            { text: 'Tongyu', nextScene: 'accuse_tongyu' },
+            { text: 'Olivia', nextScene: 'accuse_olivia' },
+            { text: 'Derek', nextScene: 'accuse_derek' },
+            { text: 'Kacper', nextScene: 'accuse_kacper' },
+            { text: 'Patricia', nextScene: 'accuse_patricia' },
+            { text: 'Simon', nextScene: 'accuse_simon' },
+            { text: 'Jane', nextScene: 'accuse_jane' },
+            { text: 'Rachel', nextScene: 'accuse_rachel' },
+            { text: 'Vincent', nextScene: 'accuse_vincent' },
+            { text: 'Herby', nextScene: 'accuse_herby' },
+            { text: 'Gloria', nextScene: 'accuse_gloria' },
+            { text: 'Boris', nextScene: 'accuse_boris' },
+            { text: 'Natasha', nextScene: 'accuse_natasha' },
+            { text: 'Felix', nextScene: 'accuse_felix' },
+            { text: 'Euan', nextScene: 'accuse_euan' },
+            { text: 'Bethany', nextScene: 'accuse_bethany' },
+            { text: 'Leonard', nextScene: 'accuse_leonard' },
+            { text: 'Yvonne', nextScene: 'accuse_yvonne' },
+            { text: 'Malcolm', nextScene: 'accuse_malcolm' },
+            { text: 'Sophia', nextScene: 'accuse_sophia' },
+            { text: 'Gregory', nextScene: 'accuse_gregory' },
+            { text: 'Heather', nextScene: 'accuse_heather' },
+            { text: 'Theodore', nextScene: 'accuse_theodore' },
+            { text: 'Millicent', nextScene: 'accuse_millicent' },
+            { text: 'Leo', nextScene: 'accuse_leo' },
+            { text: 'Dev', nextScene: 'accuse_dev' },
+            { text: 'Ren Ran', nextScene: 'accuse_renran' },
+            { text: 'Rayane', nextScene: 'accuse_rayane' },
+            { text: 'Alex', nextScene: 'accuse_alex' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
-    win: {
-        text: '<span class="congratulations">Congratulations!</span>\n\nYou correctly identified Euan as the murderer.\n\nEuan confesses that he killed your aunt, because, she discovered he was embezzling money from the household accounts. He tried to frame the new cook, Kacper, and Herby, but your detective skills uncovered the truth.\n\nCHARACTER REACTIONS:\n\nKacper: "I KNEW it wasn\'t me! Though I still think my salad was perfect despite the rush."\n\nHerby: "Thank goodness! I was so worried you\'d think I was involved because of the salad ingredient rush. My driving record is clean!"\n\nMarcus: "I delivered that package at exactly 3:47 PM as always. Punctuality saved me from suspicion!"\n\nTongyu: "The garden knew something was wrong that day. Plants can sense evil, you know."\n\nPatricia: "I should have known. The piano was 2 Hz off because of the negative energy in the house."\n\nRachel: "Even without dogs to walk, I knew something was suspicious about Euan\'s timing!"\n\nVincent: "My antiques are sensitive to murderous intent. I should have warned your aunt."\n\nGloria: "Euan had 3 overdue library books! That should have been the first clue to his criminal nature."\n\nBoris: "Ice sculptures melt, but justice freezes the guilty in place. Poetic."\n\nNatasha: "Euan never came to yoga class. A relaxed person would never commit murder."\n\nDerek: "The pool chemicals were off that day. Murder disrupts the pH balance of the universe!"\n\nSimon: "The financial discrepancies were there all along! The numbers never lie."\n\nJane: "I can\'t believe my friend was killed by that awful man. Justice has been served."\n\nFelix: "I checked my watch at the exact moment of the murder. 2 minutes slow, as always."\n\nOlivia: "Those purple orchids I delivered... they were meant to be a warning. Flowers know."\n\nBethany: "Murder is the most non-neutral color of all. Definitely not beige."\n\nLeonard: "I should polish my switch 401 times today to celebrate justice. One extra for luck."\n\nYvonne: "I\'ll make sure this makes the headline: \'Salesman Sentenced!\' Tuesday ink is best for justice."\n\nMalcolm: "Euan never learned proper chess strategy. Checkmate, you embezzling fool."\n\nSophia: "I\'ll write his confession in my most disappointing handwriting. He doesn\'t deserve Copperplate."\n\nGregory: "The barometric pressure dropped when he confessed. Even the weather condemns him!"\n\nHeather: "I\'m doing 500 justice lunges tonight! 367... 369... 370..."\n\nTheodore: "I\'ll change all the locks now. Key number 867 will be specifically for keeping Euan OUT."\n\nMillicent: "All 23 of my clocks struck the hour when justice was served. Perfectly synchronized."\n\nLeo: "Even with all the darkness of murder, I\'m just glad the truth came to light! Stay positive!"\n\nDev: "HO HO HO! Santa\'s list just got one name added to the VERY naughty section!"\n\nRen Ran: "Team morale just jumped from 91 to 98! Justice is EXCELLENT for workplace happiness!"\n\nRayane: "This would make an interesting plot for my game. Mind if I use this?"\n\nCASE CLOSED!',
-        options: []
+    //region Accusation Endings
+    accuse_marcus: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Marcus the mailman.\n\nMarcus vehemently denies it. "I delivered mail at exactly 3:47 PM, just like always! I have timestamps, witnesses, my entire route schedule! You can\'t just accuse me because I\'m nervous—I\'m ALWAYS nervous!" He insists he had no reason to harm your aunt and demands you check his mail records.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
     },
-    gameover: {
-        text: 'GAME OVER!\n\nYou accused the wrong person. The real murderer, got away and fled the country.\n\nYour aunt\'s death remains officially unsolved.',
-        options: [
-            { text: 'Restart', nextScene: 'restart' }
-        ]
+    accuse_tongyu: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Tongyu the gardener.\n\nTongyu shakes his head. "No, no, no! The plants—they would tell me if I did such a thing! The garden knows I am innocent. I loved your aunt\'s garden like my own. Why would I destroy what I cherish most?" He points to the roses outside, claiming they bloom only for the innocent.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
     },
-    bonus: {
-        text: 'Why you chosing me man? I\'m innocent!',
-        options: [
-            { text: 'Restart', nextScene: 'restart' }
-        ]
+    accuse_olivia: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Olivia the florist.\n\nOlivia gasps. "The purple orchids? Those were a GIFT! Your aunt requested them specifically—I have the order form! Just because she hated purple doesn\'t mean I knew that. I\'m a florist, not a mind reader!" She insists she only delivers flowers and would never harm a customer.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_derek: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Derek the pool cleaner.\n\nDerek protests. "The chlorine levels? That\'s just chemistry! It fluctuates based on temperature and pH balance. I was CLEANING the pool, not poisoning anyone! Check my work logs—I was nowhere near your aunt that day!" His tan face turns red with frustration.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_kacper: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Kacper the cook.\n\nKacper panics. "No! It\'s my first day! Why would I ruin my career before it even starts? The salad was FRESH—I can prove it! I was just nervous because everything was new! Please, taste my food, it\'s not poisoned!" He offers to make you another dish to prove his innocence.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_patricia: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Patricia the piano tuner.\n\nPatricia\'s eyes narrow. "The 2 Hz discrepancy was because someone TOUCHED the piano after I tuned it! My work is PERFECT. I would never harm anyone over criticism—I\'ve heard worse from actual professionals. Your aunt respected my craft." She demands you check the piano for fingerprints.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_simon: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Simon the accountant.\n\nSimon pulls out his ledger. "The numbers don\'t lie, and neither do I! Every transaction is documented, timestamped, and verified. If there were discrepancies, it\'s because someone ELSE was stealing! I was trying to HELP your aunt, not kill her!" He shows you pages of financial records.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_jane: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Jane the friend.\n\nJane breaks down crying. "She was my FRIEND! My best friend! How could you think I\'d hurt her? Yes, I have a past, but she was helping me move forward, not threatening me! You\'re making a terrible mistake!" She sobs uncontrollably, insisting you\'ve got it all wrong.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_rachel: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Rachel the dog walker.\n\nRachel shakes her head vigorously. "I walk DOGS, I don\'t KILL people! The timing contradictions? I walk multiple houses—of course my schedule varies! Your aunt never even had dogs for me to walk here! Check my client list!" She pulls out her phone showing her route schedule.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_vincent: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Vincent the antique dealer.\n\nVincent looks offended. "Forgeries? FORGERIES?! I deal only in authentic pieces! Your aunt trusted me with her collection for YEARS. The antiques themselves would reject me if I\'d done such a thing—they have energy, they KNOW!" He insists every piece has proper authentication documents.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_herby: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Herby the delivery driver.\n\nHerby stammers nervously. "I-I was just delivering salad ingredients! The rush was because the restaurant called late! I\'m always nervous when I drive—that\'s just who I am! I have a clean driving record, you can check!" He fumbles for his driver\'s license to prove his innocence.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_gloria: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Gloria the librarian.\n\nGloria adjusts her glasses indignantly. "Book forgeries? I\'m a LIBRARIAN, not a criminal! I track overdue books because that\'s my JOB. Your aunt always returned her books on time—she was one of my favorite patrons! This accusation is absurd!" She pulls out library records showing your aunt\'s borrowing history.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_boris: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Boris the ice sculptor.\n\nBoris responds poetically. "Ice melts, truth remains. My sculptures are pure art, frozen beauty, nothing more. Your aunt admired my work—why would I shatter that relationship like ice beneath a hammer? The cold preserves, it does not kill." He maintains his artistic innocence.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_natasha: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Natasha the yoga instructor.\n\nNatasha takes a deep breath. "I teach yoga and mindfulness. Healing crystals are spiritual tools, not medicine. I never claimed otherwise. Your aunt attended my classes regularly—we had a peaceful relationship. Violence contradicts everything I believe in." She remains eerily calm despite the accusation.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_felix: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Felix the watch repairman.\n\nFelix checks his watch nervously. "My watch being 2 minutes slow is a MECHANICAL issue, not evidence! I repair timepieces, I don\'t fence jewelry! Your aunt brought her watches to me for years—she trusted me! Check my inventory, everything is legitimate!" He insists his obsession with time is just professionalism.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_euan: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Euan the accountant.\n\nEuan looks shocked. "Embezzling? I was the one who SUGGESTED the independent audit! Why would I do that if I was stealing? Every penny is accounted for in my ledgers. If there are discrepancies, someone else caused them. I\'ve served your family faithfully for years!" He opens his briefcase to show financial records.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_bethany: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Bethany the interior designer.\n\nBethany responds in her neutral tone. "Your aunt had strong opinions about design, yes. But criticism is part of my profession. I\'ve worked with far more difficult clients. My knowledge of the house layout is from DESIGNING it, not from planning a murder. This accusation is... disappointing." Her expression remains unreadable.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_leonard: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Leonard the electrician.\n\nLeonard starts counting under his breath. "400... 400... always 400. Your aunt never mocked me—she UNDERSTOOD me. She let me work at my own pace. 401 times? No. Never. Always 400. The wiring is SAFE. I would never... 400... 400..." He continues counting, insisting you\'ve made an error.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_yvonne: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Yvonne the journalist.\n\nYvonne pulls out her notepad. "Fabricated stories? I\'m an INVESTIGATIVE journalist! Your aunt was a source, not a threat! The contradictory times are because I interview multiple people—that\'s how journalism WORKS. You\'re confusing thorough reporting with guilt!" She insists on documenting this "false accusation" for her next column.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_malcolm: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Malcolm the chess instructor.\n\nMalcolm shakes his head. "Banned from professional chess? Show me the documentation! I teach chess because I love the game, not because I\'m hiding something. Your aunt enjoyed our lessons. Accusing me is a poor strategic move on your part—you\'ve sacrificed your queen for nothing." He challenges you to prove your claim.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_sophia: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Sophia the calligrapher.\n\nSophia\'s hand remains steady as she writes. "Forging signatures? I create ART, not forgeries! Your aunt hired me specifically BECAUSE of my integrity. Every document I\'ve penned for her is legitimate and witnessed. My fountain pens create beauty, not violence." She shows you samples of her commissioned work.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_gregory: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Gregory the meteorologist.\n\nGregory checks his barometer. "Falsified weather data? My predictions are based on SCIENCE! The barometric pressure readings are all documented and peer-reviewed. Your aunt consulted me about weather patterns—she never accused me of fraud. You can\'t manipulate atmospheric conditions!" He shows you meteorological charts.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_heather: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Heather the fitness trainer.\n\nHeather continues counting. "367... 368... Your aunt was in GREAT shape! Why would she sue me? 369... 370... My training is professional and safe! 371... The lunges help me focus, not cope with guilt! 372... You\'re interrupting my workout with false accusations! 373..." She refuses to stop her exercise routine.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_theodore: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Theodore the locksmith.\n\nTheodore\'s keys jangle as he protests. "Duplicate keys for burglaries? I keep detailed records of every key I make! Your aunt trusted me with her security! Key 867 was made with her explicit permission for emergency access. I\'m a LOCKSMITH, not a burglar!" He offers to show his key registry.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_millicent: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Millicent the clock collector.\n\nMillicent checks her 23 clocks. "Sell the estate? Your aunt never mentioned that! And I don\'t covet her clocks—I have my OWN collection! The synchronized timing is simply proper maintenance. Every clock here is precisely calibrated. Time doesn\'t lie, and neither do I." All her clocks tick in perfect harmony.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_leo: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Leo the motivational speaker.\n\nLeo smiles sadly. "Everyone has a past, friend. I\'ve always been open about mine—it\'s part of my story of growth and positivity! Your aunt supported my journey; she never threatened me. This accusation is a negative energy I won\'t accept. Stay positive, and find the real truth!" He maintains his optimistic demeanor.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_dev: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Dev the Santa impersonator.\n\nDev\'s jolly demeanor fades. "HO HO... No. Charity scam? Every donation is documented and goes directly to children! Your aunt even VOLUNTEERED at my Christmas events! She knew the charity was legitimate! Check the records—I\'m on the NICE list, not the naughty one!" He shows you charity receipts.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_renran: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Ren Ran the HR specialist.\n\nRen Ran pulls out her metrics tablet. "Team morale is at 98% because we have excellent workplace practices! Your aunt never contacted us about harassment—that would have been documented! All our metrics are verified through anonymous surveys. This accusation drops my morale from 98% to 45%!" She shows you certified HR reports.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_rayane: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Rayane the programmer.\n\nRayane looks up from his laptop. "Hacking software? Dude, it\'s literally just a murder mystery game! You can see the source code on GitHub—it\'s public! Your aunt thought it was cool, she even playtested it! The Git commits are REAL, you can verify the timestamps with GitHub\'s servers!" He offers to show you his repository.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
+    },
+    accuse_alex: {
+        text: '<span class="congratulations">Case Closed?</span>\n\nYou accuse Alex the accountant.\n\nAlex remains calm. "Financial irregularities? Our firm undergoes regular audits—everything is transparent. Your aunt consulted me for financial advice; she trusted me. I was at the library, you can check with the librarian. My calm demeanor is just my personality, not evidence of guilt." He offers to provide his firm\'s audit reports.\n\nThe case is closed... but did you accuse the right person?',
+        options: [{ text: 'Restart', nextScene: 'restart' }]
     },
     //endregion
     //region Extra Suspects
@@ -893,6 +998,30 @@ const scenes = {
         options: [
             { text: 'Ask what he\'s working on', nextScene: 'rayane_project' },
             { text: 'Back to Rayane', nextScene: 'rayane' },
+            { text: 'Back to interrogation room', nextScene: 'intro' }
+        ]
+    },
+    alex: {
+        text: 'Alex sits quietly with his hands folded on the table. He looks at you calmly and nods in greeting.\n\n',
+        options: [
+            { text: 'Ask about his background', nextScene: 'alex_background' },
+            { text: 'Ask about his whereabouts', nextScene: 'alex_whereabouts' },
+            { text: 'Back to interrogation room', nextScene: 'intro' }
+        ]
+    },
+    alex_background: {
+        text: 'Alex explains he works as an accountant for a small firm downtown. He\'s known your aunt for several years through mutual friends. He speaks in a measured tone, neither overly friendly nor defensive. Just straightforward.\n\n',
+        options: [
+            { text: 'Ask about his whereabouts', nextScene: 'alex_whereabouts' },
+            { text: 'Back to Alex', nextScene: 'alex' },
+            { text: 'Back to interrogation room', nextScene: 'intro' }
+        ]
+    },
+    alex_whereabouts: {
+        text: 'Alex says he spent most of the day in the library reading. He had a few conversations with people there but didn\'t pay much attention to the exact times. When asked about the murder, he simply states he had no reason to harm anyone and hopes the truth comes out soon.\n\n',
+        options: [
+            { text: 'Ask about his background', nextScene: 'alex_background' },
+            { text: 'Back to Alex', nextScene: 'alex' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     }
