@@ -1059,6 +1059,12 @@ function init() {
     // Initialize browser functionality
     setupBrowser();
     
+    // Initialize progress bar
+    setupProgressBar();
+    
+    // Initialize font size controls
+    setupFontSizeControls();
+    
     // Try to load saved game
     loadGame();
     
@@ -1248,6 +1254,12 @@ function displayOptions(options) {
         
         optionsDiv.appendChild(button);
     });
+    
+    // Apply current font size to newly created buttons
+    const savedFontSize = parseInt(localStorage.getItem('fontSize')) || 18;
+    if (savedFontSize !== 18) {
+        applyFontSize(savedFontSize);
+    }
 }
 
 function hideOptions() {
@@ -1274,6 +1286,9 @@ function handleOptionSelect(option) {
     }
     // Track this scene as visited
     visitedScenes.add(option.nextScene);
+    
+    // Update progress bar
+    updateProgressBar();
     
     if (option.nextScene === 'kacper_meal') {
         kacper_cooked = true;
@@ -1352,12 +1367,32 @@ document.addEventListener('keydown', (event) => {
     }
     
     // M key for settings
-    if (key.toLowerCase() === 'm') {
+    if (key.toLowerCase() === 'm' && !event.target.matches('input, textarea')) {
         const settingsPanel = document.getElementById('settingsPanel');
         if (settingsPanel.classList.contains('open')) {
             settingsPanel.classList.remove('open');
         } else {
             settingsPanel.classList.add('open');
+        }
+    }
+    
+    // + or = key for increasing font size
+    if ((key === '+' || key === '=') && !event.target.matches('input, textarea')) {
+        const savedFontSize = parseInt(localStorage.getItem('fontSize')) || 18;
+        if (savedFontSize < 28) {
+            const newSize = savedFontSize + 2;
+            applyFontSize(newSize);
+            localStorage.setItem('fontSize', newSize);
+        }
+    }
+    
+    // - or _ key for decreasing font size
+    if ((key === '-' || key === '_') && !event.target.matches('input, textarea')) {
+        const savedFontSize = parseInt(localStorage.getItem('fontSize')) || 18;
+        if (savedFontSize > 12) {
+            const newSize = savedFontSize - 2;
+            applyFontSize(newSize);
+            localStorage.setItem('fontSize', newSize);
         }
     }
 });
@@ -1967,6 +2002,71 @@ function setupBrowser() {
         if (event.key === 'Escape' && browserContainer.style.display === 'block') {
             browserContainer.style.display = 'none';
         }
+    });
+}
+//endregion
+
+//region PROGRESS BAR
+function setupProgressBar() {
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const progressCount = document.getElementById('progressCount');
+    const progressFill = document.getElementById('progressFill');
+    
+    // Count unique character scenes visited (excluding intro, accuse, restart, etc.)
+    const characterScenes = new Set([
+        'marcus', 'tongyu', 'olivia', 'derek', 'kacper', 'patricia', 'simon', 'jane',
+        'rachel', 'vincent', 'herby', 'gloria', 'boris', 'natasha', 'felix', 'euan',
+        'bethany', 'leonard', 'yvonne', 'malcolm', 'sophia', 'gregory', 'heather',
+        'theodore', 'millicent', 'leo', 'dev', 'ren_ran', 'rayane', 'alex'
+    ]);
+    
+    const questioned = Array.from(visitedScenes).filter(scene => characterScenes.has(scene));
+    const count = questioned.length;
+    const total = 30;
+    const percentage = (count / total) * 100;
+    
+    progressCount.textContent = `${count}/${total}`;
+    progressFill.style.width = `${percentage}%`;
+}
+//endregion
+
+//region FONT SIZE CONTROLS
+function setupFontSizeControls() {
+    const fontIncrease = document.getElementById('fontIncrease');
+    const fontDecrease = document.getElementById('fontDecrease');
+    const body = document.body;
+    
+    // Load saved font size
+    let currentFontSize = parseInt(localStorage.getItem('fontSize')) || 18;
+    applyFontSize(currentFontSize);
+    
+    fontIncrease.addEventListener('click', () => {
+        if (currentFontSize < 28) {
+            currentFontSize += 2;
+            applyFontSize(currentFontSize);
+            localStorage.setItem('fontSize', currentFontSize);
+        }
+    });
+    
+    fontDecrease.addEventListener('click', () => {
+        if (currentFontSize > 12) {
+            currentFontSize -= 2;
+            applyFontSize(currentFontSize);
+            localStorage.setItem('fontSize', currentFontSize);
+        }
+    });
+}
+
+function applyFontSize(size) {
+    document.body.style.fontSize = size + 'px';
+    
+    // Update all buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.style.fontSize = size + 'px';
     });
 }
 //endregion
