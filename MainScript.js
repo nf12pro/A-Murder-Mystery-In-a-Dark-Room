@@ -21,6 +21,7 @@ let typingTimeout;
 const TYPE_SPEED = 12;
 let typewriterSound;
 let celebrationSound;
+let clickSound;
 let isTyping = false;
 
 // Game state variables
@@ -1057,6 +1058,16 @@ function init() {
     celebrationSound = new Audio('assets/celebration_sfx.mp3');
     celebrationSound.volume = 0.5;
     
+    // Initialize click sound
+    clickSound = new Audio('assets/mouse_click_sfx.mp3');
+    clickSound.volume = 0.15;
+    clickSound.preload = 'auto';
+    
+    // Initialize click sound
+    clickSound = new Audio('assets/mouse_click_sfx.mp3');
+    clickSound.volume = 0.15;
+    clickSound.preload = 'auto';
+    
     // Load saved volumes from localStorage
     loadSettings();
     
@@ -1082,6 +1093,13 @@ function init() {
     loadGame();
     
     displayScene();
+}
+
+function playClickSound() {
+    if (clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play().catch(() => {}); // Ignore if autoplay blocked
+    }
 }
 
 function log(text) {
@@ -1226,6 +1244,7 @@ function displayOptions(options) {
         const button = document.createElement('button');
         button.textContent = `[${index + 1}] ${option.text}`;
         button.onclick = () => {
+            playClickSound();
             handleOptionSelect(option);
         };
         
@@ -1333,6 +1352,7 @@ function showAccuseButton() {
     accuseBtn.id = 'accuseBtn';
     accuseBtn.textContent = 'ACCUSE';
     accuseBtn.onclick = () => {
+        playClickSound();
         currentScene = 'accuse';
         displayScene();
     };
@@ -1433,12 +1453,14 @@ function setupNotepad() {
     
     // Open notepad
     notepadBtn.addEventListener('click', () => {
+        playClickSound();
         notepadContainer.style.display = 'block';
         notepadText.focus();
     });
     
     // Close notepad
     notepadClose.addEventListener('click', () => {
+        playClickSound();
         notepadContainer.style.display = 'none';
     });
     
@@ -1476,11 +1498,13 @@ function setupSettings() {
     
     // Open settings
     settingsBtn.addEventListener('click', () => {
+        playClickSound();
         settingsPanel.classList.add('open');
     });
     
     // Close settings
     settingsClose.addEventListener('click', () => {
+        playClickSound();
         settingsPanel.classList.remove('open');
     });
     
@@ -1496,12 +1520,14 @@ function setupSettings() {
         const volume = event.target.value / 100;
         typewriterSound.volume = volume * 0.6; // Typewriter slightly quieter
         celebrationSound.volume = volume;
+        clickSound.volume = volume * 0.3; // Click very soft
         sfxVolumeValue.textContent = event.target.value + '%';
         localStorage.setItem('sfxVolume', event.target.value);
     });
     
     // Save game button
     saveGameBtn.addEventListener('click', () => {
+        playClickSound();
         saveGame();
         saveGameBtn.textContent = '✓ Game Saved!';
         setTimeout(() => {
@@ -1511,6 +1537,7 @@ function setupSettings() {
     
     // Reset game button
     resetGameBtn.addEventListener('click', () => {
+        playClickSound();
         if (confirm('Are you sure you want to reset the game? This will delete your save and start fresh.')) {
             resetGame();
             resetGameBtn.textContent = '✓ Game Reset!';
@@ -1531,12 +1558,14 @@ function loadSettings() {
         const volume = parseInt(savedSfxVolume) / 100;
         typewriterSound.volume = volume * 0.6;
         celebrationSound.volume = volume;
+        clickSound.volume = volume * 0.3;
         if (sfxVolumeSlider) sfxVolumeSlider.value = savedSfxVolume;
         if (sfxVolumeValue) sfxVolumeValue.textContent = savedSfxVolume + '%';
     } else {
         // Default 50%
         typewriterSound.volume = 0.3;
         celebrationSound.volume = 0.5;
+        clickSound.volume = 0.15;
     }
     
     // Load OpenDyslexic font setting
@@ -1953,6 +1982,7 @@ function setupBrowser() {
     }
     
     function loadPage(url) {
+        playClickSound();
         if (url === 'home') {
             loadHomepage();
         } else if (websites[url]) {
@@ -1984,6 +2014,7 @@ function setupBrowser() {
     
     // Open browser
     browserBtn.addEventListener('click', () => {
+        playClickSound();
         browserContainer.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         if (history.length === 0) {
@@ -1993,12 +2024,14 @@ function setupBrowser() {
     
     // Close browser
     browserClose.addEventListener('click', () => {
+        playClickSound();
         browserContainer.style.display = 'none';
         document.body.style.overflow = 'auto';
     });
     
     // Back button
     browserBack.addEventListener('click', () => {
+        playClickSound();
         if (historyIndex > 0) {
             historyIndex--;
             const url = history[historyIndex];
@@ -2014,6 +2047,7 @@ function setupBrowser() {
     
     // Forward button
     browserForward.addEventListener('click', () => {
+        playClickSound();
         if (historyIndex < history.length - 1) {
             historyIndex++;
             const url = history[historyIndex];
@@ -2029,6 +2063,7 @@ function setupBrowser() {
     
     // Go button
     browserGo.addEventListener('click', () => {
+        playClickSound();
         loadPage(browserAddress.value);
     });
     
@@ -2087,6 +2122,7 @@ function setupFontSizeControls() {
     applyFontSize(currentFontSize);
     
     fontIncrease.addEventListener('click', () => {
+        playClickSound();
         if (currentFontSize < 28) {
             currentFontSize += 2;
             applyFontSize(currentFontSize);
@@ -2095,6 +2131,7 @@ function setupFontSizeControls() {
     });
     
     fontDecrease.addEventListener('click', () => {
+        playClickSound();
         if (currentFontSize > 12) {
             currentFontSize -= 2;
             applyFontSize(currentFontSize);
