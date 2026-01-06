@@ -26,6 +26,8 @@ let isTyping = false;
 let currentTypingText = '';
 let currentTypingCallback = null;
 let buttonsAnimating = false;
+let autoSaveEnabled = true;
+let autoSaveInterval = null;
 
 // Game state variables
 let kacper_cooked = false;
@@ -1095,6 +1097,13 @@ function init() {
     // Try to load saved game
     loadGame();
     
+    // Setup auto-save every 1 minute if enabled
+    autoSaveInterval = setInterval(() => {
+        if (autoSaveEnabled) {
+            saveGame(true); // true = silent auto-save
+        }
+    }, 60000); // 60000ms = 1 minute
+    
     // Add click-to-skip typing functionality
     document.addEventListener('click', (e) => {
         // Only skip if clicking on non-interactive elements (not buttons, inputs, etc.)
@@ -1237,6 +1246,11 @@ function displayScene() {
     resetTyping();
     clearOutput();
     hideOptions();
+    
+    // Auto-save on scene change (except intro) if enabled
+    if (currentScene !== 'intro' && autoSaveEnabled) {
+        saveGame(true); // true = silent auto-save
+    }
     
     // Stop any ongoing speech
     stopSpeaking();
@@ -1574,6 +1588,7 @@ function setupSettings() {
     const sfxVolumeValue = document.getElementById('sfxVolumeValue');
     const saveGameBtn = document.getElementById('saveGameBtn');
     const resetGameBtn = document.getElementById('resetGameBtn');
+    const autoSaveToggle = document.getElementById('autoSaveToggle');
     
     // Open settings
     settingsBtn.addEventListener('click', () => {
@@ -1626,6 +1641,14 @@ function setupSettings() {
             }, 1000);
         }
     });
+    
+    // Auto-save toggle
+    if (autoSaveToggle) {
+        autoSaveToggle.addEventListener('change', () => {
+            autoSaveEnabled = autoSaveToggle.checked;
+            localStorage.setItem('autoSaveEnabled', autoSaveEnabled);
+        });
+    }
 }
 
 function loadSettings() {
@@ -1668,11 +1691,19 @@ function loadSettings() {
         });
     }
     
+    // Load auto-save setting
+    const savedAutoSave = localStorage.getItem('autoSaveEnabled');
+    autoSaveEnabled = savedAutoSave !== 'false'; // Default to true
+    const autoSaveToggle = document.getElementById('autoSaveToggle');
+    if (autoSaveToggle) {
+        autoSaveToggle.checked = autoSaveEnabled;
+    }
+    
     // Setup Text-to-Speech
     setupTextToSpeech();
 }
 
-function saveGame() {
+function saveGame(silent = false) {
     const gameState = {
         currentScene: currentScene,
         kacper_cooked: kacper_cooked,
@@ -1686,7 +1717,10 @@ function saveGame() {
     };
     
     localStorage.setItem('gameState', JSON.stringify(gameState));
-    console.log('Game saved!');
+    
+    if (!silent) {
+        console.log('Game saved!');
+    }
 }
 
 function loadGame() {
@@ -1819,7 +1853,7 @@ function setupBrowser() {
         'midnight-game.com': `
             <div class="web-page">
                 <h1>MIDNIGHT - A Murder Mystery Game</h1>
-                <p style="font-style: italic; color: #666;">By Rayane - Amateur Game Developer</p>
+                <p style="font-style: italic; color: #666;">By Rayane - Game Developer</p>
                 
                 <div class="game-frame">
                     <h3>🎮 Game Description</h3>
