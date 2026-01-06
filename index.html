@@ -64,6 +64,8 @@
             opacity: 0;
             font-family: 'PT Sans', sans-serif;
             font-size: 18px;
+            box-shadow: 7px 7px 0px #1a1525;
+            transition: all 0.1s ease;
         }
         button.fade-in {
             animation: fadeIn 0.4s ease-in forwards;
@@ -80,6 +82,8 @@
         }
         button:hover {
             background-color: #D93D3D;
+            box-shadow: 2px 2px 0px #1a1525;
+            transform: translate(6px, 6px);
         }
         button.visited {
             background-color: #666666;
@@ -87,6 +91,13 @@
         }
         button.visited:hover {
             background-color: #555555;
+        }
+        /* Back button styling */
+        button.back-btn {
+            background-color: #1385F0;
+        }
+        button.back-btn:hover {
+            background-color: #0f6bc4;
         }
         #options {
             min-height: 50px;
@@ -1089,6 +1100,31 @@
         </div>
         <div id="browserContent"></div>
     </div>
+    
+    <script>
+        // Make back buttons blue
+        function updateBackButtons() {
+            const allButtons = document.querySelectorAll('button');
+            allButtons.forEach(btn => {
+                if (btn.textContent.includes('Back to interrogation room')) {
+                    btn.classList.add('back-btn');
+                }
+            });
+        }
+        
+        // Observer to update new buttons as they're created
+        const observer = new MutationObserver(() => {
+            updateBackButtons();
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        // Initial application
+        setTimeout(updateBackButtons, 100);
+    </script>
     
     <script src="MainScript.js"></script>
 </body>

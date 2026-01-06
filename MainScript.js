@@ -965,7 +965,7 @@ const scenes = {
         ]
     },
     leo: {
-        text: 'Leo is just a guy who \'hates everyone\' For some reason wearing a high-vis vest inside and arguing with Fed-Ex.\n\n',
+        text: 'Leo is just a guy who \'hates everyone. \' For some reason wearing a high-vis vest inside and arguing with Fed-Ex.\n\n',
         options: [
             { text: 'Ask about his work schedule', nextScene: 'leo_schedule' },
             { text: 'Ask about why he\'s so jolly', nextScene: 'leo_jolly' },
@@ -976,26 +976,33 @@ const scenes = {
     leo_schedule: {
         text: 'Leo works 20 hours a day, 7 days a week. He has 2 hours of sleep, yet somehow maintains his cheerful demeanor. He claims his smile comes from genuine appreciation for life and the people around him. It\'s actually kind of impressive. He once saw Herby the chef frantically driving to three different grocery stores and thought "that guy needs to learn to relax."\n\n',
         options: [
+            { text: 'Ask about why he\'s so jolly', nextScene: 'leo_jolly' },
             { text: 'Ask about his 11 year old pictures', nextScene: 'leo_pictures' },
+            { text: 'Back to Leo', nextScene: 'leo' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     leo_jolly: {
         text: 'Leo explains that despite working hard, he finds joy in every moment and tries to spread that positivity to others. He was actually at home on the day of the murder, preparing a nice dinner for some friends. He mentions it was at the same time Dev was out caroling the neighborhood with Christmas spirit.\n\n',
         options: [
+            { text: 'Ask about his work schedule', nextScene: 'leo_schedule' },
             { text: 'Ask about his 11 year old pictures', nextScene: 'leo_pictures' },
+            { text: 'Back to Leo', nextScene: 'leo' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     leo_pictures: {
         text: 'Leo deletes all the pictures posted in Slack and threatens to ban you.\n',
         options: [
+            { text: 'Ask about his work schedule', nextScene: 'leo_schedule' },
+            { text: 'Ask about why he\'s so jolly', nextScene: 'leo_jolly' },
+            { text: 'Back to Leo', nextScene: 'leo' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
 
     dev: {
-        text: 'Dev is a jolly guy wearing a full Santa suit despite it being January 5th. He\'s thrilled to be interrogated. "Ho Ho Dev!" he exclaims.\n\n',
+        text: 'Dev is a jolly guy wearing a full Santa suit despite it being January 7th. He\'s thrilled to be interrogated. "Ho Ho Dev!" he exclaims.\n\n',
         options: [
             { text: 'Ask about the Santa suit', nextScene: 'dev_suit' },
             { text: 'Ask about his whereabouts', nextScene: 'dev_whereabouts' },
@@ -1013,7 +1020,7 @@ const scenes = {
         ]
     },
     dev_whereabouts: {
-        text: 'Dev was visiting every house on the block on the day of the murder, distributing unsolicited Christmas caroling. He visited 67 houses. He remembers the exact order and offers to recite them all. HO HO HO!\n\n',
+        text: 'Dev was visiting every house on the block on the day of the murder, distributing unsolicited Christmas gifts to little children. He visited 67 houses. He remembers the exact order and offers to recite them all. HO HO HO!\n\n',
         options: [
             { text: 'Ask about the Santa suit', nextScene: 'dev_suit' },
             { text: 'Ask about his mood', nextScene: 'dev_mood' },
@@ -1040,7 +1047,7 @@ const scenes = {
         ]
     },
     ren_ran_manager: {
-        text: 'Ren Ran manages a team of 23 people. They know all their names, their favorite colors, and their preferred fonts. They claim managing these details is TIME-CONSUMING but they do it JOYFULLY.\n\n',
+        text: 'Ren Ran manages a team of 23 people. She knows all their names, their favorite colors, and their preferred fonts. She claims managing these details is the key to productivity, in reality it just makes people too afraid to refuse.\n\n',
         options: [
             { text: 'Back to Ren Ran', nextScene: 'ren_ran' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -1054,14 +1061,14 @@ const scenes = {
         ]
     },
     ren_ran_morale: {
-        text: 'Ren Ran is obsessed with team morale. They conduct weekly surveys with 67 questions each. The results are displayed on a 15-foot graph in their office. They discuss their methodology exhaustively. They once tried to survey Patricia about her morale and got a death stare that "registered as a -34 on the happiness scale."\n\n',
+        text: 'Ren Ran is obsessed with team morale. They conduct weekly surveys with 68 questions each making sure to avoid 67 to prevent the 1 millisecond of unproductive behavior. The results are displayed on a 15-foot graph in their office. They discuss their methodology exhaustively. They once tried to survey Patricia about her morale and got a death stare that "registered as a -34 on the happiness scale."\n\n',
         options: [
             { text: 'Back to Ren Ran', nextScene: 'ren_ran' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     rayane: {
-        text: 'Rayane is a programmer. He\'s been frantically typing on his laptop and looks exhausted.\n\n',
+        text: 'Rayane is a guy who pretends to kknow how to write code, in reality he prompts human intelligence to let him copy and paste. He\'s been frantically pressing command C + command V on his laptop and looks exhausted.\n\n',
         options: [
             { text: 'Ask what he\'s working on', nextScene: 'rayane_project' },
             { text: 'Ask about his whereabouts', nextScene: 'rayane_whereabouts' },
@@ -1069,7 +1076,7 @@ const scenes = {
         ]
     },
     rayane_project: {
-        text: 'Rayane excitedly explains he\'s been programming a random text-based game revolving around a murder mystery. He finds it "hilariously ironic" given the current circumstances. The game apparently has suspects, clues, and even a typewriter effect for the text. He\'s been working on it non-stop. He notes that Marcus the mailman would probably appreciate the "systematic organization" of his code.\n\n',
+        text: 'Rayane excitedly explains he\'s been programming a random text-based game revolving around a murder mystery. He finds it \'hilariously ironic\' given the current circumstances. The game apparently has code into it which is really revolutionizing.\n\n',
         options: [
             { text: 'Ask about his whereabouts', nextScene: 'rayane_whereabouts' },
             { text: 'Back to Rayane', nextScene: 'rayane' },
@@ -1077,7 +1084,7 @@ const scenes = {
         ]
     },
     rayane_whereabouts: {
-        text: 'Rayane says he was in his room coding the entire day. He has Git commits timestamped throughout the day as proof. He mentions something about "debugging button animations" and "fixing the accusation logic."\n\n',
+        text: 'Rayane says he was in his room coding the entire day. He has GitHub commits timestamped throughout the day as proof. He mentions something about "debugging button animations" and "fixing the accusation logic."\n\n',
         options: [
             { text: 'Ask what he\'s working on', nextScene: 'rayane_project' },
             { text: 'Back to Rayane', nextScene: 'rayane' },
@@ -1109,7 +1116,7 @@ const scenes = {
         ]
     },
     reem: {
-        text: 'Reem is a courier who never stops moving. She\'s tapping her foot rapidly and checking her watch every few seconds. Before you can even finish your first question she\'s already answered three!\n\n',
+        text: 'Reem is a courier who never stops moving. She\'s tapping her foot rapidly and checking her watch every few seconds. Before you can even finish your first question she\'s already ordering a halal meal for both of you.\n\n',
         options: [
             { text: 'Ask about her deliveries', nextScene: 'reem_deliveries' },
             { text: 'Ask about her schedule', nextScene: 'reem_schedule' },
