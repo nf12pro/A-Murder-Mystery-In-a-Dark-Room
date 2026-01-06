@@ -53,6 +53,9 @@ let leo_coffee_known = false;
 
 // Track visited scenes
 let visitedScenes = new Set();
+
+// Track dialogue repetitions
+let dialogueRepetitions = {};
 //endregion
 
 //region 2. SCENES DEFINITION
@@ -478,6 +481,8 @@ const scenes = {
     derek_chemicals: {
         text: 'Derek mentions he noticed the chlorine levels were 0.3% higher than usual. He says this is HIGHLY unusual. He also mentions that Kacper the cook was very particular about only using filtered water. Derek found this "suspicious."\n\n',
         options: [
+            { text: 'Ask about his tan', nextScene: 'derek_tan' },
+            { text: 'Ask about water levels', nextScene: 'derek_water' },
             { text: 'Back to Derek', nextScene: 'derek' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -485,6 +490,8 @@ const scenes = {
     derek_tan: {
         text: 'Derek explains his tan comes from working outdoors. He specifically mentions it was sunny and cloudless on the day of the murder - perfect pool cleaning weather. He remembers because he saw the mailman arrive right on schedule.\n\n',
         options: [
+            { text: 'Ask about pool chemicals', nextScene: 'derek_chemicals' },
+            { text: 'Ask about water levels', nextScene: 'derek_water' },
             { text: 'Back to Derek', nextScene: 'derek' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -492,6 +499,8 @@ const scenes = {
     derek_water: {
         text: 'The pool water was exactly 2.7 inches lower than regulation. Derek seems to think this is a CRUCIAL detail.\n\n',
         options: [
+            { text: 'Ask about pool chemicals', nextScene: 'derek_chemicals' },
+            { text: 'Ask about his tan', nextScene: 'derek_tan' },
             { text: 'Back to Derek', nextScene: 'derek' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -507,6 +516,7 @@ const scenes = {
     patricia_piano: {
         text: 'Patricia says the piano was tuned to 442 Hz instead of 440 Hz. She insists this is DEEPLY troubling.\n\n',
         options: [
+            { text: 'Ask why she\'s wearing black', nextScene: 'patricia_black' },
             { text: 'Back to Patricia', nextScene: 'patricia' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -514,6 +524,7 @@ const scenes = {
     patricia_black: {
         text: 'Patricia always wears black on Mondays through Fridays. Today is Wednesday. The significance is unclear but she seems to think it matters. She mentions she was at the house tuning the piano from 2 PM to 6 PM on the day of the murder. She never left, not even for a moment. She also saw Tongyu the gardener wearing an unusual shade of green that clashed with the garden aesthetic.\n\n',
         options: [
+            { text: 'Ask about the piano', nextScene: 'patricia_piano' },
             { text: 'Back to Patricia', nextScene: 'patricia' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -530,6 +541,8 @@ const scenes = {
     simon_finances: {
         text: 'Simon reveals your aunt spent $67.32 more on groceries last month than usual. He calls this a "red flag."\n\n',
         options: [
+            { text: 'Ask about the calculator', nextScene: 'simon_calc' },
+            { text: 'Ask about tax season', nextScene: 'simon_tax' },
             { text: 'Back to Simon', nextScene: 'simon' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -537,6 +550,8 @@ const scenes = {
     simon_calc: {
         text: 'The calculator is a TI-84 Plus from 2009. Simon mentions this model was discontinued in 2013, which he finds suspicious. He also saw Felix the watchmaker intensely studying Simon\'s calculations. Felix seemed very interested in the numbers. Simon distinctly remembers this happened at 2:15 PM because he checks his watch obsessively.\n\n',
         options: [
+            { text: 'Ask about finances', nextScene: 'simon_finances' },
+            { text: 'Ask about tax season', nextScene: 'simon_tax' },
             { text: 'Back to Simon', nextScene: 'simon' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -544,6 +559,8 @@ const scenes = {
     simon_tax: {
         text: 'Simon states that your aunt filed her taxes 3 days earlier than last year. This "pattern change" seems important to him.\n\n',
         options: [
+            { text: 'Ask about finances', nextScene: 'simon_finances' },
+            { text: 'Ask about the calculator', nextScene: 'simon_calc' },
             { text: 'Back to Simon', nextScene: 'simon' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -602,6 +619,8 @@ const scenes = {
     gloria_fees: {
         text: 'The late fee is $0.15 per day. Your aunt owed $4.65. Gloria has calculated this is exactly 31 days overdue.\n\n',
         options: [
+            { text: 'Ask about books', nextScene: 'gloria_books' },
+            { text: 'Ask about library hours', nextScene: 'gloria_hours' },
             { text: 'Back to Gloria', nextScene: 'gloria' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -609,6 +628,8 @@ const scenes = {
     gloria_hours: {
         text: 'Gloria mentions the library closes at 6 PM on Thursdays but 7 PM on Fridays. Your aunt visited on a Thursday. Surely this means something! Gloria also notes that Patricia the piano tuner returned a book that day at 5:45 PM. She seemed flustered and rushed, completely unlike her usual composed demeanor.\n\n',
         options: [
+            { text: 'Ask about books', nextScene: 'gloria_books' },
+            { text: 'Ask about late fees', nextScene: 'gloria_fees' },
             { text: 'Back to Gloria', nextScene: 'gloria' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -623,6 +644,7 @@ const scenes = {
     boris_sculptures: {
         text: 'Boris made an ice swan for your aunt\'s party 3 months ago. It melted in 4 hours and 23 minutes. He tracked the time meticulously. He mentions Patricia the piano tuner complained the ice was too cold and affected the piano\'s tuning. Boris and Patricia haven\'t spoken since.\n\n',
         options: [
+            { text: 'Back to Boris', nextScene: 'boris' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
@@ -637,6 +659,7 @@ const scenes = {
     natasha_yoga: {
         text: 'Natasha says your aunt attended classes every third Tuesday. She missed the last one. This "break in routine" seems significant to her.\n\n',
         options: [
+            { text: 'Ask why she\'s on one leg', nextScene: 'natasha_leg' },
             { text: 'Back to Natasha', nextScene: 'natasha' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -644,6 +667,7 @@ const scenes = {
     natasha_leg: {
         text: 'Natasha explains she\'s demonstrating Tree Pose. She can hold it for exactly 17 minutes. She offers to show you. She mentions she once tried to teach Kacper the cook some relaxation techniques, but he was too nervous and kept dropping things.\n\n',
         options: [
+            { text: 'Ask about yoga classes', nextScene: 'natasha_yoga' },
             { text: 'Back to Natasha', nextScene: 'natasha' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -661,6 +685,9 @@ const scenes = {
     felix_simon: {
         text: 'Felix becomes very nervous. He mentions he saw Simon\'s calculations and realized they matched a time he saw Rachel walking past the house. Rachel, the dog walker with no dogs! The timing was at 3:47 PM, he\'s absolutely certain. Felix is convinced this is the key to everything.\n\n',
         options: [
+            { text: 'Ask about watch repairs', nextScene: 'felix_repairs' },
+            { text: 'Ask about the time', nextScene: 'felix_time' },
+            { text: 'Ask why he keeps checking', nextScene: 'felix_checking' },
             { text: 'Back to Felix', nextScene: 'felix' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -668,6 +695,9 @@ const scenes = {
     felix_repairs: {
         text: 'Felix repaired your aunt\'s watch 6 times. Each time it was exactly 2 minutes slow. He finds this pattern "deeply meaningful."\n\n',
         options: [
+            { text: 'Ask about Simon\'s calculations', nextScene: 'felix_simon' },
+            { text: 'Ask about the time', nextScene: 'felix_time' },
+            { text: 'Ask why he keeps checking', nextScene: 'felix_checking' },
             { text: 'Back to Felix', nextScene: 'felix' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -675,6 +705,9 @@ const scenes = {
     felix_time: {
         text: 'Felix says it\'s currently 14:37:22. He checks again. Now it\'s 14:37:28. Time keeps passing, he observes gravely.\n\n',
         options: [
+            { text: 'Ask about watch repairs', nextScene: 'felix_repairs' },
+            { text: 'Ask about Simon\'s calculations', nextScene: 'felix_simon' },
+            { text: 'Ask why he keeps checking', nextScene: 'felix_checking' },
             { text: 'Back to Felix', nextScene: 'felix' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -682,6 +715,9 @@ const scenes = {
     felix_checking: {
         text: 'Felix checks his watch every 43 seconds. He\'s been doing this for 12 years. He seems to think this is relevant information.\n\n',
         options: [
+            { text: 'Ask about watch repairs', nextScene: 'felix_repairs' },
+            { text: 'Ask about Simon\'s calculations', nextScene: 'felix_simon' },
+            { text: 'Ask about the time', nextScene: 'felix_time' },
             { text: 'Back to Felix', nextScene: 'felix' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -697,6 +733,7 @@ const scenes = {
     bethany_decorating: {
         text: 'Bethany redecorated the guest bathroom 8 months ago. She chose curtains in "Eggshell White #67" instead of "Eggshell White #46." Critical difference.\n\n',
         options: [
+            { text: 'Ask about color choices', nextScene: 'bethany_colors' },
             { text: 'Back to Bethany', nextScene: 'bethany' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -704,6 +741,7 @@ const scenes = {
     bethany_colors: {
         text: 'Bethany explains she only works in neutral tones. Your aunt wanted burgundy once. Bethany refused. This conflict was 4 years ago but still haunts her. She complains that Vincent\'s office has "aggressively offensive" lighting that ruins the beige undertones.\n\n',
         options: [
+            { text: 'Ask about recent decorating', nextScene: 'bethany_decorating' },
             { text: 'Back to Bethany', nextScene: 'bethany' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -719,6 +757,7 @@ const scenes = {
     leonard_electrical: {
         text: 'Leonard installed a new circuit breaker last year. It handles 200 amps instead of 150. He emphasizes this upgrade MUST be important.\n\n',
         options: [
+            { text: 'Ask about the switch', nextScene: 'leonard_switch' },
             { text: 'Back to Leonard', nextScene: 'leonard' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -726,6 +765,7 @@ const scenes = {
     leonard_switch: {
         text: 'Leonard carries this switch everywhere. It\'s from 1987. He flips it 400 times daily for "practice." This seems like a vital detail to him. He whispers that Sophia\'s "perfect handwriting" is obviously traced with a ruler and thus "cheating at penmanship."\n\n',
         options: [
+            { text: 'Ask about electrical work', nextScene: 'leonard_electrical' },
             { text: 'Back to Leonard', nextScene: 'leonard' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -742,6 +782,8 @@ const scenes = {
     yvonne_delivery: {
         text: 'Yvonne delivered papers at 6:17 AM every day for 9 years. One day she was 3 minutes late. It was 2 years ago but she still feels guilty. On the day of the murder, she delivered at exactly 6:17 AM and saw Vincent\'s car already parked outside. She remembers thinking it was odd for him to be there so early.\n\n',
         options: [
+            { text: 'Ask about the ink stains', nextScene: 'yvonne_ink' },
+            { text: 'Ask about headlines', nextScene: 'yvonne_headlines' },
             { text: 'Back to Yvonne', nextScene: 'yvonne' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -749,6 +791,8 @@ const scenes = {
     yvonne_ink: {
         text: 'The ink stains are from the Tuesday edition specifically. Tuesday ink is different from Wednesday ink, she claims mysteriously. She mentions she once saw Sophia the calligrapher and thought her perfect handwriting was "unnatural." Yvonne prefers the authenticity of newsprint.\n\n',
         options: [
+            { text: 'Ask about newspaper delivery', nextScene: 'yvonne_delivery' },
+            { text: 'Ask about headlines', nextScene: 'yvonne_headlines' },
             { text: 'Back to Yvonne', nextScene: 'yvonne' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -756,6 +800,8 @@ const scenes = {
     yvonne_headlines: {
         text: 'Yvonne remembers everyp headline from the past month. She recites them all. None seem relevant but she insists they are.\n\n',
         options: [
+            { text: 'Ask about newspaper delivery', nextScene: 'yvonne_delivery' },
+            { text: 'Ask about the ink stains', nextScene: 'yvonne_ink' },
             { text: 'Back to Yvonne', nextScene: 'yvonne' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -770,6 +816,7 @@ const scenes = {
     malcolm_chess: {
         text: 'Malcolm taught your aunt the Sicilian Defense. She never mastered it. Malcolm believes this inability is somehow connected to everything. He also mentions that Theodore the locksmith once challenged him to a game. Malcolm won in 4 moves and Theodore has avoided him ever since.\n\n',
         options: [
+            { text: 'Back to Malcolm', nextScene: 'malcolm' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
@@ -784,6 +831,7 @@ const scenes = {
     sophia_work: {
         text: 'Sophia wrote place cards for a dinner party 5 weeks ago. She used Copperplate script with a 3mm nib. The specificity seems crucial.\n\n',
         options: [
+            { text: 'Ask about her handwriting', nextScene: 'sophia_handwriting' },
             { text: 'Back to Sophia', nextScene: 'sophia' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -791,6 +839,7 @@ const scenes = {
     sophia_handwriting: {
         text: 'Sophia explains perfect handwriting takes 10,000 hours of practice. She\'s practiced for exactly 10,867 hours. She\'s been counting. She once saw Tongyu\'s signature and noticed it "lacked the proper ascender height" which she found "deeply unsettling."\n\n',
         options: [
+            { text: 'Ask about recent work', nextScene: 'sophia_work' },
             { text: 'Back to Sophia', nextScene: 'sophia' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -807,6 +856,8 @@ const scenes = {
     gregory_weather: {
         text: 'Gregory states it was 67°F on the day of the murder. The humidity was 67%. Wind speed: 3 mph northeast. He insists these numbers matter. He mentions Kacper the critic once complained about "improperly filtered air quality" which Gregory found "meteorologically absurd."\n\n',
         options: [
+            { text: 'Ask about the barometer', nextScene: 'gregory_barometer' },
+            { text: 'Ask about predictions', nextScene: 'gregory_predictions' },
             { text: 'Back to Gregory', nextScene: 'gregory' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -814,6 +865,8 @@ const scenes = {
     gregory_barometer: {
         text: 'The barometric pressure was 1013.2 millibars, which is EXACTLY average. Gregory finds this suspicious. Too average, he says.\n\n',
         options: [
+            { text: 'Ask about the weather', nextScene: 'gregory_weather' },
+            { text: 'Ask about predictions', nextScene: 'gregory_predictions' },
             { text: 'Back to Gregory', nextScene: 'gregory' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -821,6 +874,8 @@ const scenes = {
     gregory_predictions: {
         text: 'Gregory predicted rain for that day. It didn\'t rain. His first wrong prediction in 3 months. Surely this cosmic imbalance is significant!\n\n',
         options: [
+            { text: 'Ask about the weather', nextScene: 'gregory_weather' },
+            { text: 'Ask about the barometer', nextScene: 'gregory_barometer' },
             { text: 'Back to Gregory', nextScene: 'gregory' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -836,6 +891,7 @@ const scenes = {
     heather_training: {
         text: 'Heather trained your aunt in high-intensity intervals. 45 seconds work, 15 seconds rest. She chants these numbers repeatedly.\n\n',
         options: [
+            { text: 'Ask her to stop lunging', nextScene: 'heather_lunging' },
             { text: 'Back to Heather', nextScene: 'heather' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -843,6 +899,7 @@ const scenes = {
     heather_lunging: {
         text: 'Heather explains she must do 500 lunges daily. She\'s at 367. She cannot stop. This is clearly the most important information she has. She grunts something about Bethany the decorator being "too sedentary" and needing to "add more movement to beige."\n\n',
         options: [
+            { text: 'Ask about training sessions', nextScene: 'heather_training' },
             { text: 'Back to Heather', nextScene: 'heather' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -859,6 +916,8 @@ const scenes = {
     theodore_locks: {
         text: 'Theodore changed the locks 7 times in 2 years. Your aunt kept losing keys. Each lock was a different brand. He lists all 7 brands.\n\n',
         options: [
+            { text: 'Ask about the keys', nextScene: 'theodore_keys' },
+            { text: 'Ask about security', nextScene: 'theodore_security' },
             { text: 'Back to Theodore', nextScene: 'theodore' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -866,6 +925,8 @@ const scenes = {
     theodore_keys: {
         text: 'Theodore has 867 keys on his keychain. He knows what each one opens. He offers to tell you about all of them. He once saw Leonard the waiter meticulously polishing silverware for three hours straight and thought "that man understands commitment to unnecessary precision."\n\n',
         options: [
+            { text: 'Ask about locks', nextScene: 'theodore_locks' },
+            { text: 'Ask about security', nextScene: 'theodore_security' },
             { text: 'Back to Theodore', nextScene: 'theodore' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -873,6 +934,8 @@ const scenes = {
     theodore_security: {
         text: 'Theodore installed a deadbolt that\'s rated for 900 pounds of force. The previous one was only 850 pounds. This 50-pound difference haunts him.\n\n',
         options: [
+            { text: 'Ask about locks', nextScene: 'theodore_locks' },
+            { text: 'Ask about the keys', nextScene: 'theodore_keys' },
             { text: 'Back to Theodore', nextScene: 'theodore' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -888,6 +951,7 @@ const scenes = {
     millicent_clocks: {
         text: 'Millicent sold your aunt 14 antique clocks. Each one chimes at a different interval. She lists all the intervals. None of them seem relevant.\n\n',
         options: [
+            { text: 'Ask about the ticking', nextScene: 'millicent_ticking' },
             { text: 'Back to Millicent', nextScene: 'millicent' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -895,6 +959,7 @@ const scenes = {
     millicent_ticking: {
         text: 'Millicent carries 3 pocket watches in her coat. They\'re synchronized to different time zones. She can\'t remember which ones. This must mean something! She mentions that Rayane the accountant has "disgustingly imprecise" timing and once arrived at 3:04 instead of 3:00.\n\n',
         options: [
+            { text: 'Ask about the clocks', nextScene: 'millicent_clocks' },
             { text: 'Back to Millicent', nextScene: 'millicent' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -910,6 +975,7 @@ const scenes = {
     leo_schedule: {
         text: 'Leo works 16 hours a day, 6 days a week. He has 2 hours of sleep, yet somehow maintains his cheerful demeanor. He claims his smile comes from genuine appreciation for life and the people around him. It\'s actually kind of impressive. He once saw Herby the chef frantically driving to three different grocery stores and thought "that guy needs to learn to relax."\n\n',
         options: [
+            { text: 'Ask about why he\'s so jolly', nextScene: 'leo_jolly' },
             { text: 'Back to Leo', nextScene: 'leo' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -917,6 +983,7 @@ const scenes = {
     leo_jolly: {
         text: 'Leo explains that despite working hard, he finds joy in every moment and tries to spread that positivity to others. He was actually at home on the day of the murder, preparing a nice dinner for some friends. He mentions it was at the same time Dev was out caroling the neighborhood with Christmas spirit.\n\n',
         options: [
+            { text: 'Ask about his work schedule', nextScene: 'leo_schedule' },
             { text: 'Back to Leo', nextScene: 'leo' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -934,6 +1001,8 @@ const scenes = {
     dev_suit: {
         text: 'Dev explains he wears the Santa suit year-round to "spread Christmas spirit!" He\'s been wearing it for 4 consecutive years without washing it. The smell is... notable. He insists Gregory the tailor could "never understand the spiritual bond between Santa and his suit."\n\n',
         options: [
+            { text: 'Ask about his whereabouts', nextScene: 'dev_whereabouts' },
+            { text: 'Ask about his mood', nextScene: 'dev_mood' },
             { text: 'Back to Dev', nextScene: 'dev' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -941,6 +1010,8 @@ const scenes = {
     dev_whereabouts: {
         text: 'Dev was visiting every house on the block on the day of the murder, distributing unsolicited Christmas caroling. He visited 67 houses. He remembers the exact order and offers to recite them all. HO HO HO!\n\n',
         options: [
+            { text: 'Ask about the Santa suit', nextScene: 'dev_suit' },
+            { text: 'Ask about his mood', nextScene: 'dev_mood' },
             { text: 'Back to Dev', nextScene: 'dev' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -948,6 +1019,8 @@ const scenes = {
     dev_mood: {
         text: 'Dev is ALWAYS in a good mood. He was in a good mood the day of the murder. He\'s in a good mood right now, despite being interrogated for murder. He finds this inconsistency between his mood and the tragedy "philosophically confusing." Dev also mentions seeing Leo on his 23rd call of the day and they made eye contact.\n\n',
         options: [
+            { text: 'Ask about the Santa suit', nextScene: 'dev_suit' },
+            { text: 'Ask about his whereabouts', nextScene: 'dev_whereabouts' },
             { text: 'Back to Dev', nextScene: 'dev' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -1266,6 +1339,14 @@ function displayScene() {
     clearOutput();
     hideOptions();
     
+    // Track dialogue repetitions for non-intro/non-accuse scenes
+    if (!currentScene.startsWith('accuse_') && currentScene !== 'intro' && currentScene !== 'win') {
+        if (!dialogueRepetitions[currentScene]) {
+            dialogueRepetitions[currentScene] = 0;
+        }
+        dialogueRepetitions[currentScene]++;
+    }
+    
     // Stop celebration sound when leaving win scene
     if (celebrationSound && !celebrationSound.paused && currentScene !== 'win') {
         celebrationSound.pause();
@@ -1322,6 +1403,24 @@ function displayScene() {
     }
     
     let textToType = scene.text;
+    
+    // Add annoyed responses for repeated dialogue
+    const repetitionCount = dialogueRepetitions[currentScene] || 0;
+    if (repetitionCount >= 3 && !currentScene.startsWith('accuse_') && currentScene !== 'intro' && currentScene !== 'win') {
+        // Define aggressive characters who refuse to answer
+        const aggressiveCharacters = ['euan', 'kacper', 'patricia', 'yvonne', 'heather', 'theodore'];
+        const isAggressive = aggressiveCharacters.some(char => currentScene.toLowerCase().includes(char));
+        
+        if (isAggressive) {
+            textToType = "\"Are you SERIOUS right now? I already told you this! I'm NOT repeating myself again. Ask me something else!\"\n\n";
+        } else if (repetitionCount === 3) {
+            textToType = "\"*sighs heavily* ...Fine, I'll tell you AGAIN...\"\n\n" + scene.text.substring(0, Math.floor(scene.text.length * 0.6)) + "...\n\n";
+        } else if (repetitionCount === 4) {
+            textToType = "\"Seriously? AGAIN?! Okay, short version:\"\n\n" + scene.text.substring(0, Math.floor(scene.text.length * 0.4)) + "... That's all you're getting.\n\n";
+        } else {
+            textToType = "\"I'M NOT SAYING IT AGAIN.\"\n\n";
+        }
+    }
     
     // Play celebration sound on win or any accusation scene
     if (currentScene === 'win' || currentScene.startsWith('accuse_')) {
@@ -2286,6 +2385,7 @@ function saveGame(silent = false, slotNumber = null) {
         felix_watched: felix_watched,
         leo_coffee_known: leo_coffee_known,
         visitedScenes: Array.from(visitedScenes),
+        dialogueRepetitions: dialogueRepetitions,
         achievementCount: countUnlockedAchievements(),
         saveDate: new Date().toISOString()
     };
@@ -2317,6 +2417,7 @@ function loadGame(slotNumber = null) {
             felix_watched = gameState.felix_watched;
             leo_coffee_known = gameState.leo_coffee_known;
             visitedScenes = new Set(gameState.visitedScenes || []);
+            dialogueRepetitions = gameState.dialogueRepetitions || {};
             
             // Update progress bar after loading
             updateProgressBar();
@@ -2347,6 +2448,7 @@ function resetGame() {
     felix_watched = false;
     leo_coffee_known = false;
     visitedScenes = new Set();
+    dialogueRepetitions = {};
     
     // Reset achievements
     achievements = {
