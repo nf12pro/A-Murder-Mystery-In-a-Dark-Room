@@ -918,8 +918,17 @@ function init() {
     celebrationSound = new Audio('assets/celebration_sfx.mp3');
     celebrationSound.volume = 0.5;
     
+    // Load saved volumes from localStorage
+    loadSettings();
+    
     // Initialize notepad functionality
     setupNotepad();
+    
+    // Initialize settings functionality
+    setupSettings();
+    
+    // Try to load saved game
+    loadGame();
     
     displayScene();
 }
@@ -1218,7 +1227,7 @@ function setupNotepad() {
     
     // Close on Escape key
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && notepadContainer.classList.contains('open')) {
+        if (event.key === 'Escape' && Container.classList.contains('open')) {
             notepadContainer.classList.remove('open');
         }
     });
@@ -1232,6 +1241,159 @@ function setupNotepad() {
     notepadText.addEventListener('keydown', (event) => {
         event.stopPropagation();
     });
+}
+//endregion
+
+//region 3.5 SETTINGS FUNCTIONALITY
+function setupSettings() {
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const settingsClose = document.getElementById('settingsClose');
+    const typewriterVolumeSlider = document.getElementById('typewriterVolume');
+    const typewriterVolumeValue = document.getElementById('typewriterVolumeValue');
+    const celebrationVolumeSlider = document.getElementById('celebrationVolume');
+    const celebrationVolumeValue = document.getElementById('celebrationVolumeValue');
+    const saveGameBtn = document.getElementById('saveGameBtn');
+    const resetGameBtn = document.getElementById('resetGameBtn');
+    
+    // Open settings
+    settingsBtn.addEventListener('click', () => {
+        settingsPanel.classList.add('open');
+    });
+    
+    // Close settings
+    settingsClose.addEventListener('click', () => {
+        settingsPanel.classList.remove('open');
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && settingsPanel.classList.contains('open')) {
+            settingsPanel.classList.remove('open');
+        }
+    });
+    
+    // Typewriter volume control
+    typewriterVolumeSlider.addEventListener('input', (event) => {
+        const volume = event.target.value / 100;
+        typewriterSound.volume = volume;
+        typewriterVolumeValue.textContent = event.target.value + '%';
+        localStorage.setItem('typewriterVolume', event.target.value);
+    });
+    
+    // Celebration volume control
+    celebrationVolumeSlider.addEventListener('input', (event) => {
+        const volume = event.target.value / 100;
+        celebrationSound.volume = volume;
+        celebrationVolumeValue.textContent = event.target.value + '%';
+        localStorage.setItem('celebrationVolume', event.target.value);
+    });
+    
+    // Save game button
+    saveGameBtn.addEventListener('click', () => {
+        saveGame();
+        saveGameBtn.textContent = '✓ Game Saved!';
+        setTimeout(() => {
+            saveGameBtn.textContent = '💾 Save Game';
+        }, 2000);
+    });
+    
+    // Reset game button
+    resetGameBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to reset the game? This will delete your save and start fresh.')) {
+            resetGame();
+            resetGameBtn.textContent = '✓ Game Reset!';
+            setTimeout(() => {
+                resetGameBtn.textContent = '🔄 Reset Game';
+                settingsPanel.classList.remove('open');
+            }, 1000);
+        }
+    });
+}
+
+function loadSettings() {
+    // Load typewriter volume
+    const savedTypewriterVolume = localStorage.getItem('typewriterVolume');
+    if (savedTypewriterVolume !== null) {
+        const volume = parseInt(savedTypewriterVolume) / 100;
+        typewriterSound.volume = volume;
+        document.getElementById('typewriterVolume').value = savedTypewriterVolume;
+        document.getElementById('typewriterVolumeValue').textContent = savedTypewriterVolume + '%';
+    }
+    
+    // Load celebration volume
+    const savedCelebrationVolume = localStorage.getItem('celebrationVolume');
+    if (savedCelebrationVolume !== null) {
+        const volume = parseInt(savedCelebrationVolume) / 100;
+        celebrationSound.volume = volume;
+        document.getElementById('celebrationVolume').value = savedCelebrationVolume;
+        document.getElementById('celebrationVolumeValue').textContent = savedCelebrationVolume + '%';
+    }
+}
+
+function saveGame() {
+    const gameState = {
+        currentScene: currentScene,
+        kacper_cooked: kacper_cooked,
+        tongyu_salad_shared: tongyu_salad_shared,
+        euan_salad_told: euan_salad_told,
+        marcus_package_received: marcus_package_received,
+        olivia_orchids_mentioned: olivia_orchids_mentioned,
+        simon_calculator_seen: simon_calculator_seen,
+        felix_watched: felix_watched,
+        leo_coffee_known: leo_coffee_known,
+        visitedScenes: Array.from(visitedScenes)
+    };
+    
+    localStorage.setItem('gameState', JSON.stringify(gameState));
+    console.log('Game saved!');
+}
+
+function loadGame() {
+    const savedState = localStorage.getItem('gameState');
+    if (savedState) {
+        try {
+            const gameState = JSON.parse(savedState);
+            currentScene = gameState.currentScene;
+            kacper_cooked = gameState.kacper_cooked;
+            tongyu_salad_shared = gameState.tongyu_salad_shared;
+            euan_salad_told = gameState.euan_salad_told;
+            marcus_package_received = gameState.marcus_package_received;
+            olivia_orchids_mentioned = gameState.olivia_orchids_mentioned;
+            simon_calculator_seen = gameState.simon_calculator_seen;
+            felix_watched = gameState.felix_watched;
+            leo_coffee_known = gameState.leo_coffee_known;
+            visitedScenes = new Set(gameState.visitedScenes);
+            console.log('Game loaded!');
+        } catch (e) {
+            console.error('Failed to load game:', e);
+        }
+    }
+}
+
+function resetGame() {
+    // Clear all game state
+    localStorage.removeItem('gameState');
+    localStorage.removeItem('detectiveNotes');
+    
+    // Reset variables
+    currentScene = 'intro';
+    kacper_cooked = false;
+    tongyu_salad_shared = false;
+    euan_salad_told = false;
+    marcus_package_received = false;
+    olivia_orchids_mentioned = false;
+    simon_calculator_seen = false;
+    felix_watched = false;
+    leo_coffee_known = false;
+    visitedScenes = new Set();
+    
+    // Clear notepad
+    document.getElementById('notepadText').value = '';
+    
+    // Restart game
+    displayScene();
+    console.log('Game reset!');
 }
 //endregion
 

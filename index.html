@@ -232,6 +232,148 @@
             color: #999;
             font-style: italic;
         }
+        /* Settings Button */
+        #settingsBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 90px;
+            width: 60px;
+            height: 60px;
+            background-color: #453B61;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 1 !important;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #fff;
+        }
+        #settingsBtn:hover {
+            transform: rotate(90deg);
+            background-color: #5a4a7a;
+        }
+        /* Settings Panel */
+        #settingsPanel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background-color: #2a2240;
+            border: 3px solid #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            z-index: 200;
+            display: none;
+            padding: 30px;
+            color: #fff;
+        }
+        #settingsPanel.open {
+            display: block;
+        }
+        #settingsClose {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: #F24B4B;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 1 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        #settingsClose:hover {
+            background-color: #D93D3D;
+        }
+        #settingsTitle {
+            font-family: 'Moga', cursive;
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .settings-section {
+            margin-bottom: 20px;
+        }
+        .settings-label {
+            font-family: 'PT Sans', sans-serif;
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .settings-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #453B61;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .settings-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #F24B4B;
+            cursor: pointer;
+        }
+        .settings-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #F24B4B;
+            cursor: pointer;
+            border: none;
+        }
+        .settings-value {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 14px;
+            color: #FFD700;
+        }
+        .settings-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: #F24B4B;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: 1 !important;
+            transition: background-color 0.2s;
+        }
+        .settings-button:hover {
+            background-color: #D93D3D;
+        }
+        .settings-button.success {
+            background-color: #4CAF50;
+        }
+        .settings-button.success:hover {
+            background-color: #45a049;
+        }
+        .settings-button.danger {
+            background-color: #d32f2f;
+        }
+        .settings-button.danger:hover {
+            background-color: #b71c1c;
+        }
     </style>
 </head>
 <body>
@@ -239,8 +381,36 @@
     <div id="options"></div>
     <div id="accuseContainer"></div>
     
+    <!-- Settings Button -->
+    <div id="settingsBtn" title="Settings">⚙️</div>
+    
     <!-- Notepad Button -->
     <div id="notepadBtn" title="Open Notepad">📝</div>
+    
+    <!-- Settings Panel -->
+    <div id="settingsPanel">
+        <button id="settingsClose">×</button>
+        <div id="settingsTitle">Settings</div>
+        
+        <div class="settings-section">
+            <label class="settings-label">
+                Typewriter SFX Volume: <span class="settings-value" id="typewriterVolumeValue">30%</span>
+            </label>
+            <input type="range" min="0" max="100" value="30" class="settings-slider" id="typewriterVolume">
+        </div>
+        
+        <div class="settings-section">
+            <label class="settings-label">
+                Celebration SFX Volume: <span class="settings-value" id="celebrationVolumeValue">50%</span>
+            </label>
+            <input type="range" min="0" max="100" value="50" class="settings-slider" id="celebrationVolume">
+        </div>
+        
+        <div class="settings-section">
+            <button class="settings-button success" id="saveGameBtn">💾 Save Game</button>
+            <button class="settings-button danger" id="resetGameBtn">🔄 Reset Game</button>
+        </div>
+    </div>
     
     <!-- Notepad Container -->
     <div id="notepadContainer">
