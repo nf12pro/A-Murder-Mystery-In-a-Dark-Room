@@ -782,6 +782,26 @@
         </div>
         
         <div class="settings-section">
+            <label class="settings-label" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="ttsToggle" style="width: 20px; height: 20px; cursor: pointer;">
+                🔊 Text-to-Speech (Read Aloud)
+            </label>
+        </div>
+        
+        <div class="settings-section" id="ttsVoiceSection" style="display: none;">
+            <label class="settings-label">
+                Voice: <select id="ttsVoiceSelect" style="padding: 5px; border-radius: 5px; margin-left: 10px;"></select>
+            </label>
+        </div>
+        
+        <div class="settings-section" id="ttsSpeedSection" style="display: none;">
+            <label class="settings-label">
+                Speech Speed: <span class="settings-value" id="ttsSpeedValue">1.0x</span>
+            </label>
+            <input type="range" min="5" max="15" value="10" class="settings-slider" id="ttsSpeed">
+        </div>
+        
+        <div class="settings-section">
             <button class="settings-button success" id="saveGameBtn">💾 Save Game</button>
             <button class="settings-button danger" id="resetGameBtn">🔄 Reset Game</button>
         </div>

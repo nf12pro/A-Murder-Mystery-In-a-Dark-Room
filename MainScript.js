@@ -1160,6 +1160,10 @@ function displayScene() {
     resetTyping();
     clearOutput();
     hideOptions();
+    
+    // Stop any ongoing speech
+    stopSpeaking();
+    
     let textToType = scene.text;
     
     // Play celebration sound on win
@@ -1205,6 +1209,10 @@ function displayScene() {
     if (currentScene === 'herby' && euan_salad_told) {
         options.splice(2, 0, { text: 'Ask about why he cared about the salad ingredients', nextScene: 'herby_salad_care' });
     }
+    
+    // Speak the text if TTS is enabled
+    speakText(textToType);
+    
     typeText(textToType, () => {
         displayOptions(options);
         showOptions();
@@ -1562,6 +1570,9 @@ function loadSettings() {
             }
         });
     }
+    
+    // Setup Text-to-Speech
+    setupTextToSpeech();
 }
 
 function saveGame() {
@@ -2240,6 +2251,142 @@ function setupNotepadTools() {
     if (savedNotes) {
         notepad.innerHTML = savedNotes;
     }
+}
+//endregion
+
+//region TEXT-TO-SPEECH
+let ttsEnabled = false;
+let ttsVoice = null;
+let ttsSpeed = 1.0;
+let speechSynth = window.speechSynthesis;
+let currentUtterance = null;
+
+function setupTextToSpeech() {
+    const ttsToggle = document.getElementById('ttsToggle');
+    const ttsVoiceSection = document.getElementById('ttsVoiceSection');
+    const ttsSpeedSection = document.getElementById('ttsSpeedSection');
+    const ttsVoiceSelect = document.getElementById('ttsVoiceSelect');
+    const ttsSpeedSlider = document.getElementById('ttsSpeed');
+    const ttsSpeedValue = document.getElementById('ttsSpeedValue');
+    
+    if (!ttsToggle || !speechSynth) return;
+    
+    // Load saved TTS settings
+    ttsEnabled = localStorage.getItem('ttsEnabled') === 'true';
+    ttsToggle.checked = ttsEnabled;
+    
+    const savedSpeed = localStorage.getItem('ttsSpeed');
+    if (savedSpeed) {
+        ttsSpeed = parseFloat(savedSpeed);
+        ttsSpeedSlider.value = ttsSpeed * 10;
+        ttsSpeedValue.textContent = ttsSpeed.toFixed(1) + 'x';
+    }
+    
+    // Show/hide TTS options based on toggle
+    if (ttsEnabled) {
+        ttsVoiceSection.style.display = 'block';
+        ttsSpeedSection.style.display = 'block';
+    }
+    
+    // Populate voice list
+    function populateVoices() {
+        const voices = speechSynth.getVoices();
+        ttsVoiceSelect.innerHTML = '';
+        
+        // Filter for English voices
+        const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+        const voicesToUse = englishVoices.length > 0 ? englishVoices : voices;
+        
+        voicesToUse.forEach((voice, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = voice.name + ' (' + voice.lang + ')';
+            ttsVoiceSelect.appendChild(option);
+        });
+        
+        // Load saved voice
+        const savedVoice = localStorage.getItem('ttsVoice');
+        if (savedVoice && voicesToUse[savedVoice]) {
+            ttsVoiceSelect.value = savedVoice;
+            ttsVoice = voicesToUse[savedVoice];
+        } else if (voicesToUse.length > 0) {
+            ttsVoice = voicesToUse[0];
+        }
+    }
+    
+    // Voices may load asynchronously
+    populateVoices();
+    if (speechSynth.onvoiceschanged !== undefined) {
+        speechSynth.onvoiceschanged = populateVoices;
+    }
+    
+    // TTS toggle handler
+    ttsToggle.addEventListener('change', () => {
+        ttsEnabled = ttsToggle.checked;
+        localStorage.setItem('ttsEnabled', ttsEnabled);
+        
+        if (ttsEnabled) {
+            ttsVoiceSection.style.display = 'block';
+            ttsSpeedSection.style.display = 'block';
+        } else {
+            ttsVoiceSection.style.display = 'none';
+            ttsSpeedSection.style.display = 'none';
+            stopSpeaking();
+        }
+    });
+    
+    // Voice selection handler
+    ttsVoiceSelect.addEventListener('change', () => {
+        const voices = speechSynth.getVoices();
+        const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+        const voicesToUse = englishVoices.length > 0 ? englishVoices : voices;
+        ttsVoice = voicesToUse[ttsVoiceSelect.value];
+        localStorage.setItem('ttsVoice', ttsVoiceSelect.value);
+    });
+    
+    // Speed slider handler
+    ttsSpeedSlider.addEventListener('input', () => {
+        ttsSpeed = ttsSpeedSlider.value / 10;
+        ttsSpeedValue.textContent = ttsSpeed.toFixed(1) + 'x';
+        localStorage.setItem('ttsSpeed', ttsSpeed);
+    });
+}
+
+function speakText(text) {
+    if (!ttsEnabled || !speechSynth) return;
+    
+    // Stop any current speech
+    stopSpeaking();
+    
+    // Clean text for speech
+    const cleanText = text
+        .replace(/<[^>]*>/g, '') // Remove HTML tags
+        .replace(/\*\*/g, '')    // Remove bold markers
+        .replace(/==/g, '')      // Remove highlight markers
+        .replace(/\n\n/g, '. ')  // Convert double newlines to pauses
+        .replace(/\n/g, ' ')     // Convert single newlines to spaces
+        .replace(/\s+/g, ' ')    // Collapse multiple spaces
+        .trim();
+    
+    if (!cleanText) return;
+    
+    currentUtterance = new SpeechSynthesisUtterance(cleanText);
+    currentUtterance.rate = ttsSpeed;
+    currentUtterance.pitch = 1;
+    currentUtterance.volume = 1;
+    
+    if (ttsVoice) {
+        currentUtterance.voice = ttsVoice;
+    }
+    
+    speechSynth.speak(currentUtterance);
+}
+
+function stopSpeaking() {
+    if (speechSynth) {
+        speechSynth.cancel();
+    }
+    currentUtterance = null;
 }
 //endregion
 
