@@ -1653,8 +1653,7 @@ function setupBrowser() {
                 </div>
                 
                 <h2>Developer Notes</h2>
-                <p><em>"This game is hilariously ironic given current circumstances. Started coding it weeks ago, never thought I'd actually be in a real murder investigation!"</em></p>
-                <p><em>"The systematic organization of the code would probably make Marcus the mailman proud. Everything is timestamped and documented."</em></p>
+                <p><em>"This game is just insanely ironic. Started coding it a few days ago, then I ended up being in a real murder investigation!"</em></p>
                 
                 <h2>Recent Commits</h2>
                 <table>
@@ -1829,8 +1828,59 @@ function setupBrowser() {
         `
     };
     
+    function loadHomepage() {
+        browserContent.innerHTML = `
+            <div class="web-page">
+                <h1>🌐 WebExplorer Home</h1>
+                <p style="text-align: center; color: #666; margin-bottom: 30px;">Browse available websites to gather evidence</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div class="website-widget" onclick="loadBrowserPage('financial-records.com')" style="cursor: pointer; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">💰 Financial Records</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Estate financial data and suspicious transactions</p>
+                    </div>
+                    
+                    <div class="website-widget" onclick="loadBrowserPage('midnight-game.com')" style="cursor: pointer; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">🎮 Midnight Game</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Rayane's murder mystery game and commit history</p>
+                    </div>
+                    
+                    <div class="website-widget" onclick="loadBrowserPage('library-catalog.com')" style="cursor: pointer; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">📚 Library Catalog</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Book checkout records and overdue items</p>
+                    </div>
+                    
+                    <div class="website-widget" onclick="loadBrowserPage('weather-archive.com')" style="cursor: pointer; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">🌤️ Weather Archive</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Meteorological data and weather reports</p>
+                    </div>
+                    
+                    <div class="website-widget" onclick="loadBrowserPage('news-daily.com')" style="cursor: pointer; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">📰 News Daily</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Local news articles and investigations</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 15px; background: #f0f0f0; border-radius: 8px; text-align: center;">
+                    <p style="margin: 0; color: #666; font-size: 14px;">💡 Tip: Click any widget to visit that website</p>
+                </div>
+            </div>
+        `;
+        browserAddress.value = 'home';
+        
+        // Add to history
+        if (historyIndex < history.length - 1) {
+            history = history.slice(0, historyIndex + 1);
+        }
+        history.push('home');
+        historyIndex++;
+        updateNavButtons();
+    }
+    
     function loadPage(url) {
-        if (websites[url]) {
+        if (url === 'home') {
+            loadHomepage();
+        } else if (websites[url]) {
             browserContent.innerHTML = websites[url];
             browserAddress.value = url;
             
@@ -1843,20 +1893,7 @@ function setupBrowser() {
             
             updateNavButtons();
         } else {
-            browserContent.innerHTML = `
-                <div class="web-page">
-                    <h1>404 - Page Not Found</h1>
-                    <p>The URL "${url}" could not be found.</p>
-                    <h2>Available Sites:</h2>
-                    <ul>
-                        <li><a href="#" onclick="loadBrowserPage('financial-records.com')">financial-records.com</a> - Estate financial data</li>
-                        <li><a href="#" onclick="loadBrowserPage('midnight-game.com')">midnight-game.com</a> - Rayane's murder mystery game</li>
-                        <li><a href="#" onclick="loadBrowserPage('library-catalog.com')">library-catalog.com</a> - Library checkout records</li>
-                        <li><a href="#" onclick="loadBrowserPage('weather-archive.com')">weather-archive.com</a> - Weather data archive</li>
-                        <li><a href="#" onclick="loadBrowserPage('news-daily.com')">news-daily.com</a> - Local news articles</li>
-                    </ul>
-                </div>
-            `;
+            loadHomepage();
         }
     }
     
@@ -1874,7 +1911,7 @@ function setupBrowser() {
     browserBtn.addEventListener('click', () => {
         browserContainer.style.display = 'block';
         if (history.length === 0) {
-            loadPage('midnight-game.com');
+            loadHomepage();
         }
     });
     
@@ -1888,8 +1925,12 @@ function setupBrowser() {
         if (historyIndex > 0) {
             historyIndex--;
             const url = history[historyIndex];
-            browserContent.innerHTML = websites[url];
-            browserAddress.value = url;
+            if (url === 'home') {
+                loadHomepage();
+            } else {
+                browserContent.innerHTML = websites[url];
+                browserAddress.value = url;
+            }
             updateNavButtons();
         }
     });
@@ -1899,8 +1940,12 @@ function setupBrowser() {
         if (historyIndex < history.length - 1) {
             historyIndex++;
             const url = history[historyIndex];
-            browserContent.innerHTML = websites[url];
-            browserAddress.value = url;
+            if (url === 'home') {
+                loadHomepage();
+            } else {
+                browserContent.innerHTML = websites[url];
+                browserAddress.value = url;
+            }
             updateNavButtons();
         }
     });
