@@ -33,6 +33,9 @@ let olivia_orchids_mentioned = false;
 let simon_calculator_seen = false;
 let felix_watched = false;
 let leo_coffee_known = false;
+
+// Track visited scenes
+let visitedScenes = new Set();
 //endregion
 
 //region 2. SCENES DEFINITION
@@ -288,7 +291,7 @@ const scenes = {
             { text: 'Leo', nextScene: 'gameover' },
             { text: 'Dev', nextScene: 'gameover' },
             { text: 'Ren Ran', nextScene: 'gameover' },
-            { text: 'Rayane', nextScene: 'gameover' },
+            { text: 'Rayane', nextScene: 'bonus' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
@@ -302,10 +305,16 @@ const scenes = {
             { text: 'Restart', nextScene: 'restart' }
         ]
     },
+    bonus: {
+        text: 'Why you chosing me man? I\'m innocent!',
+        options: [
+            { text: 'Restart', nextScene: 'restart' }
+        ]
+    },
     //endregion
     //region Extra Suspects
     marcus: {
-        text: 'Marcus is the mailman. He seems extremely nervous.\n\n',
+        text: 'Marcus is the mailman. He seems extremely nervous, constantly checking his watch and looking over his shoulder. He\'s been delivering mail in this neighborhood for nearly a decade.\n\n',
         options: [
             { text: 'Ask about the mail schedule', nextScene: 'marcus_mail' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -356,7 +365,7 @@ const scenes = {
         ]
     },
     derek_chemicals: {
-        text: 'Derek mentions he noticed the chlorine levels were 0.3% higher than usual. He says this is HIGHLY unusual.\n\n',
+        text: 'Derek mentions he noticed the chlorine levels were 0.3% higher than usual. He says this is HIGHLY unusual. He also mentions that Kacper the cook was very particular about only using filtered water. Derek found this "suspicious."\n\n',
         options: [
             { text: 'Back to Derek', nextScene: 'derek' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -377,7 +386,7 @@ const scenes = {
         ]
     },
     patricia: {
-        text: 'Patricia is the piano tuner. She\'s wearing all black.\n\n',
+        text: 'Patricia is the piano tuner. She\'s wearing all black, and has a very serious demeanor. She\'s been maintaining your aunt\'s piano for several years and takes great pride in her meticulous work.\n\n',
         options: [
             { text: 'Ask about the piano', nextScene: 'patricia_piano' },
             { text: 'Ask why she\'s wearing black', nextScene: 'patricia_black' },
@@ -392,7 +401,7 @@ const scenes = {
         ]
     },
     patricia_black: {
-        text: 'Patricia always wears black on Mondays through Fridays. Today is Wednesday. The significance is unclear but she seems to think it matters.\n\n',
+        text: 'Patricia always wears black on Mondays through Fridays. Today is Wednesday. The significance is unclear but she seems to think it matters. She mentions she once saw the gardener, Tongyu, wearing an unusual shade of green. Patricia thought it clashed with the garden aesthetic.\n\n',
         options: [
             { text: 'Back to Patricia', nextScene: 'patricia' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -429,20 +438,20 @@ const scenes = {
         ]
     },
     rachel: {
-        text: 'Rachel is the dog walker. There are no dogs.\n\n',
+        text: 'Rachel is the dog walker. There are no dogs at your aunt\'s residence, yet she continues to be employed. She always wears dog hair on her clothes, which is peculiar given her actual job duties. She\'s been paid for this non-existent work for 5 years.\n\n',
         options: [
             { text: 'Ask about the missing dogs', nextScene: 'rachel_dogs' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     rachel_dogs: {
-        text: 'Rachel explains your aunt never had dogs, but she was hired anyway "just in case." This has been her job for 5 years.\n\n',
+        text: 'Rachel explains your aunt never had dogs, but she was hired anyway "just in case." This has been her job for 5 years. She mentions she often saw Herby the chauffeur driving around frantically. She also noticed the mailman Marcus was always exactly on time, which she found "creepy."\n\n',
         options: [
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     vincent: {
-        text: 'Vincent is the antique dealer. He smells like mothballs.\n\n',
+        text: 'Vincent is the antique dealer who supplies rare and valuable items to wealthy clients. He smells like mothballs and has an obsessive attention to detail. His shop is filled with priceless items, and he\'s known for being extremely particular about authentication.\n\n',
         options: [
             { text: 'Ask about recent purchases', nextScene: 'vincent_purchases' },
             { text: 'Ask about the smell', nextScene: 'vincent_smell' },
@@ -464,7 +473,7 @@ const scenes = {
         ]
     },
     gloria: {
-        text: 'Gloria is the librarian from the local library.\n\n',
+        text: 'Gloria is the librarian from the local library. She\'s meticulous about library procedures and takes her job very seriously. She has an encyclopedic knowledge of all patrons and their borrowing habits, and never forgets a single overdue item.\n\n',
         options: [
             { text: 'Ask about borrowed books', nextScene: 'gloria_books' },
             { text: 'Ask about late fees', nextScene: 'gloria_fees' },
@@ -487,27 +496,27 @@ const scenes = {
         ]
     },
     gloria_hours: {
-        text: 'Gloria mentions the library closes at 6 PM on Thursdays but 7 PM on Fridays. Your aunt visited on a Thursday. Surely this means something!\n\n',
+        text: 'Gloria mentions the library closes at 6 PM on Thursdays but 7 PM on Fridays. Your aunt visited on a Thursday. Surely this means something! Gloria also notes that Euan the salesman once returned a book 2 minutes before closing. She found his punctuality "unnerving."\n\n',
         options: [
             { text: 'Back to Gloria', nextScene: 'gloria' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     boris: {
-        text: 'Boris is the ice sculptor. His hands are always cold.\n\n',
+        text: 'Boris is the ice sculptor. His hands are always cold from working with ice, and he has a peculiar habit of obsessively documenting everything he creates. He works in a small studio downtown and has created dozens of sculptures for high society events.\n\n',
         options: [
             { text: 'Ask about recent sculptures', nextScene: 'boris_sculptures' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     boris_sculptures: {
-        text: 'Boris made an ice swan for your aunt\'s party 3 months ago. It melted in 4 hours and 23 minutes. He tracked the time meticulously.\n\n',
+        text: 'Boris made an ice swan for your aunt\'s party 3 months ago. It melted in 4 hours and 23 minutes. He tracked the time meticulously. He mentions Patricia the piano tuner complained the ice was too cold and affected the piano\'s tuning. Boris and Patricia haven\'t spoken since.\n\n',
         options: [
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
     },
     natasha: {
-        text: 'Natasha is the yoga instructor. She\'s standing on one leg.\n\n',
+        text: 'Natasha is the yoga instructor. She\'s standing on one leg, demonstrating perfect balance and control. She holds classes at an exclusive studio and your aunt was one of her most dedicated students for the past two years.\n\n',
         options: [
             { text: 'Ask about yoga classes', nextScene: 'natasha_yoga' },
             { text: 'Ask why she\'s on one leg', nextScene: 'natasha_leg' },
@@ -522,7 +531,7 @@ const scenes = {
         ]
     },
     natasha_leg: {
-        text: 'Natasha explains she\'s demonstrating Tree Pose. She can hold it for exactly 17 minutes. She offers to show you.\n\n',
+        text: 'Natasha explains she\'s demonstrating Tree Pose. She can hold it for exactly 17 minutes. She offers to show you. She mentions she once tried to teach Kacper the cook some relaxation techniques, but he was too nervous and kept dropping things.\n\n',
         options: [
             { text: 'Back to Natasha', nextScene: 'natasha' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -582,7 +591,7 @@ const scenes = {
         ]
     },
     bethany_colors: {
-        text: 'Bethany explains she only works in neutral tones. Your aunt wanted burgundy once. Bethany refused. This conflict was 4 years ago but still haunts her.\n\n',
+        text: 'Bethany explains she only works in neutral tones. Your aunt wanted burgundy once. Bethany refused. This conflict was 4 years ago but still haunts her. She complains that Vincent\'s office has "aggressively offensive" lighting that ruins the beige undertones.\n\n',
         options: [
             { text: 'Back to Bethany', nextScene: 'bethany' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -604,7 +613,7 @@ const scenes = {
         ]
     },
     leonard_switch: {
-        text: 'Leonard carries this switch everywhere. It\'s from 1987. He flips it 400 times daily for "practice." This seems like a vital detail to him.\n\n',
+        text: 'Leonard carries this switch everywhere. It\'s from 1987. He flips it 400 times daily for "practice." This seems like a vital detail to him. He whispers that Sophia\'s "perfect handwriting" is obviously traced with a ruler and thus "cheating at penmanship."\n\n',
         options: [
             { text: 'Back to Leonard', nextScene: 'leonard' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -627,7 +636,7 @@ const scenes = {
         ]
     },
     yvonne_ink: {
-        text: 'The ink stains are from the Tuesday edition specifically. Tuesday ink is different from Wednesday ink, she claims mysteriously.\n\n',
+        text: 'The ink stains are from the Tuesday edition specifically. Tuesday ink is different from Wednesday ink, she claims mysteriously. She mentions she once saw Sophia the calligrapher and thought her perfect handwriting was "unnatural." Yvonne prefers the authenticity of newsprint.\n\n',
         options: [
             { text: 'Back to Yvonne', nextScene: 'yvonne' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -648,7 +657,7 @@ const scenes = {
         ]
     },
     malcolm_chess: {
-        text: 'Malcolm taught your aunt the Sicilian Defense. She never mastered it. Malcolm believes this inability is somehow connected to everything.\n\n',
+        text: 'Malcolm taught your aunt the Sicilian Defense. She never mastered it. Malcolm believes this inability is somehow connected to everything. He also mentions that Theodore the locksmith once challenged him to a game. Malcolm won in 4 moves and Theodore has avoided him ever since.\n\n',
         options: [
             { text: 'Back to interrogation room', nextScene: 'intro' }
         ]
@@ -669,7 +678,7 @@ const scenes = {
         ]
     },
     sophia_handwriting: {
-        text: 'Sophia explains perfect handwriting takes 10,000 hours of practice. She\'s practiced for exactly 10,867 hours. She\'s been counting.\n\n',
+        text: 'Sophia explains perfect handwriting takes 10,000 hours of practice. She\'s practiced for exactly 10,867 hours. She\'s been counting. She once saw Tongyu\'s signature and noticed it "lacked the proper ascender height" which she found "deeply unsettling."\n\n',
         options: [
             { text: 'Back to Sophia', nextScene: 'sophia' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -685,7 +694,7 @@ const scenes = {
         ]
     },
     gregory_weather: {
-        text: 'Gregory states it was 68°F on the day of the murder. The humidity was 67%. Wind speed: 3 mph northeast. He insists these numbers matter.\n\n',
+        text: 'Gregory states it was 68°F on the day of the murder. The humidity was 67%. Wind speed: 3 mph northeast. He insists these numbers matter. He mentions Kacper the critic once complained about "improperly filtered air quality" which Gregory found "meteorologically absurd."\n\n',
         options: [
             { text: 'Back to Gregory', nextScene: 'gregory' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -721,7 +730,7 @@ const scenes = {
         ]
     },
     heather_lunging: {
-        text: 'Heather explains she must do 500 lunges daily. She\'s at 367. She cannot stop. This is clearly the most important information she has.\n\n',
+        text: 'Heather explains she must do 500 lunges daily. She\'s at 367. She cannot stop. This is clearly the most important information she has. She grunts something about Bethany the decorator being "too sedentary" and needing to "add more movement to beige."\n\n',
         options: [
             { text: 'Back to Heather', nextScene: 'heather' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -744,7 +753,7 @@ const scenes = {
         ]
     },
     theodore_keys: {
-        text: 'Theodore has 867 keys on his keychain. He knows what each one opens. He offers to tell you about all of them.\n\n',
+        text: 'Theodore has 867 keys on his keychain. He knows what each one opens. He offers to tell you about all of them. He once saw Leonard the waiter meticulously polishing silverware for three hours straight and thought "that man understands commitment to unnecessary precision."\n\n',
         options: [
             { text: 'Back to Theodore', nextScene: 'theodore' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -773,7 +782,7 @@ const scenes = {
         ]
     },
     millicent_ticking: {
-        text: 'Millicent carries 3 pocket watches in her coat. They\'re synchronized to different time zones. She can\'t remember which ones. This must mean something!\n\n',
+        text: 'Millicent carries 3 pocket watches in her coat. They\'re synchronized to different time zones. She can\'t remember which ones. This must mean something! She mentions that Rayane the accountant has "disgustingly imprecise" timing and once arrived at 3:04 instead of 3:00.\n\n',
         options: [
             { text: 'Back to Millicent', nextScene: 'millicent' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -788,7 +797,7 @@ const scenes = {
         ]
     },
     leo_schedule: {
-        text: 'Leo works 16 hours a day, 6 days a week. He has 2 hours of sleep, yet somehow maintains his cheerful demeanor. He claims his smile comes from genuine appreciation for life and the people around him. It\'s actually kind of impressive.\n\n',
+        text: 'Leo works 16 hours a day, 6 days a week. He has 2 hours of sleep, yet somehow maintains his cheerful demeanor. He claims his smile comes from genuine appreciation for life and the people around him. It\'s actually kind of impressive. He once saw Herby the chef frantically driving to three different grocery stores and thought "that guy needs to learn to relax."\n\n',
         options: [
             { text: 'Back to Leo', nextScene: 'leo' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -812,7 +821,7 @@ const scenes = {
         ]
     },
     dev_suit: {
-        text: 'Dev explains he wears the Santa suit year-round to "spread Christmas spirit!" He\'s been wearing it for 4 consecutive years without washing it. The smell is... notable.\n\n',
+        text: 'Dev explains he wears the Santa suit year-round to "spread Christmas spirit!" He\'s been wearing it for 4 consecutive years without washing it. The smell is... notable. He insists Gregory the tailor could "never understand the spiritual bond between Santa and his suit."\n\n',
         options: [
             { text: 'Back to Dev', nextScene: 'dev' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -856,7 +865,7 @@ const scenes = {
         ]
     },
     ren_ran_morale: {
-        text: 'Ren Ran is obsessed with team morale. They conduct weekly surveys with 67 questions each. The results are displayed on a 15-foot graph in their office. They discuss their methodology exhaustively.\n\n',
+        text: 'Ren Ran is obsessed with team morale. They conduct weekly surveys with 67 questions each. The results are displayed on a 15-foot graph in their office. They discuss their methodology exhaustively. They once tried to survey Patricia about her morale and got a death stare that "registered as a -34 on the happiness scale."\n\n',
         options: [
             { text: 'Back to Ren Ran', nextScene: 'ren_ran' },
             { text: 'Back to interrogation room', nextScene: 'intro' }
@@ -871,7 +880,7 @@ const scenes = {
         ]
     },
     rayane_project: {
-        text: 'Rayane excitedly explains he\'s been programming a random text-based game revolving around a murder mystery. He finds it "hilariously ironic" given the current circumstances. The game apparently has suspects, clues, and even a typewriter effect for the text. He\'s been working on it non-stop.\n\n',
+        text: 'Rayane excitedly explains he\'s been programming a random text-based game revolving around a murder mystery. He finds it "hilariously ironic" given the current circumstances. The game apparently has suspects, clues, and even a typewriter effect for the text. He\'s been working on it non-stop. He notes that Marcus the mailman would probably appreciate the "systematic organization" of his code.\n\n',
         options: [
             { text: 'Ask about his whereabouts', nextScene: 'rayane_whereabouts' },
             { text: 'Back to Rayane', nextScene: 'rayane' },
@@ -928,6 +937,8 @@ function resetTyping() {
 function startTypewriterSound() {
     if (typewriterSound && !isTyping) {
         isTyping = true;
+        // Add typing class to grey out the output
+        outputDiv.classList.add('typing');
         typewriterSound.currentTime = 0;
         typewriterSound.play().catch(() => {});
     }
@@ -936,6 +947,8 @@ function startTypewriterSound() {
 function stopTypewriterSound() {
     if (typewriterSound && isTyping) {
         isTyping = false;
+        // Remove typing class to restore normal appearance
+        outputDiv.classList.remove('typing');
         typewriterSound.pause();
         typewriterSound.currentTime = 0;
     }
@@ -1022,6 +1035,51 @@ function displayOptions(options) {
         button.onclick = () => {
             handleOptionSelect(option);
         };
+        
+        // Check if this scene has been visited
+        let shouldGreyOut = false;
+        
+        if (currentScene === 'intro') {
+            // In intro scene: grey out character if all their questions have been visited
+            const characterScene = scenes[option.nextScene];
+            if (characterScene && characterScene.options) {
+                // Get all non-"Back to" options for this character
+                const questionOptions = characterScene.options.filter(opt => !opt.text.startsWith('Back to'));
+                
+                // Add conditional options that might be available
+                let conditionalOptions = [];
+                if (option.nextScene === 'kacper' && !kacper_cooked) {
+                    conditionalOptions.push('kacper_meal');
+                }
+                if (option.nextScene === 'marcus' && !marcus_package_received) {
+                    conditionalOptions.push('marcus_package');
+                }
+                if (option.nextScene === 'tongyu' && kacper_cooked) {
+                    conditionalOptions.push('tongyu_salad');
+                }
+                if (option.nextScene === 'euan' && tongyu_salad_shared) {
+                    conditionalOptions.push('euan_salad');
+                }
+                if (option.nextScene === 'herby' && euan_salad_told) {
+                    conditionalOptions.push('herby_salad_care');
+                }
+                
+                // Check if all question options (including conditional ones) have been visited
+                if (questionOptions.length > 0) {
+                    const allQuestionsVisited = questionOptions.every(opt => visitedScenes.has(opt.nextScene));
+                    const allConditionalVisited = conditionalOptions.every(opt => visitedScenes.has(opt));
+                    shouldGreyOut = allQuestionsVisited && allConditionalVisited;
+                }
+            }
+        } else {
+            // In other scenes: grey out if visited and not a "Back to" button
+            shouldGreyOut = visitedScenes.has(option.nextScene) && !option.text.startsWith('Back to');
+        }
+        
+        if (shouldGreyOut) {
+            button.classList.add('visited');
+        }
+        
         optionsDiv.appendChild(button);
     });
 }
@@ -1048,6 +1106,9 @@ function handleOptionSelect(option) {
         restartGame();
         return;
     }
+    // Track this scene as visited
+    visitedScenes.add(option.nextScene);
+    
     if (option.nextScene === 'kacper_meal') {
         kacper_cooked = true;
     }
@@ -1089,6 +1150,7 @@ function restartGame() {
     simon_calculator_seen = false;
     felix_watched = false;
     leo_coffee_known = false;
+    visitedScenes.clear();
     currentScene = 'intro';
     displayScene();
 }
