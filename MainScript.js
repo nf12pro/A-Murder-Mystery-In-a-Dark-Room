@@ -1201,10 +1201,10 @@ function init() {
     
     // Initialize font size controls
     setupFontSizeControls();
-    
-    // Try to load saved game
-    loadGame();
-    
+
+    // Setup start menu
+    setupStartMenu();
+
     // Setup auto-save every 1 minute if enabled
     autoSaveInterval = setInterval(() => {
         if (autoSaveEnabled) {
@@ -1233,7 +1233,67 @@ function init() {
         }
     });
     
+    // Don't display scene yet - wait for start menu choice
+    // displayScene(); is called after start menu selection
+}
+
+function setupStartMenu() {
+    const startMenu = document.getElementById('startMenu');
+    const newGameBtn = document.getElementById('newGameBtn');
+    const loadGameBtn = document.getElementById('loadGameBtn');
+    
+    // Hide game elements initially
+    document.getElementById('progressBar').style.opacity = '0';
+    document.getElementById('fontSizeControls').style.opacity = '0';
+    document.getElementById('settingsBtn').style.opacity = '0';
+    document.getElementById('achievementsBtn').style.opacity = '0';
+    document.getElementById('notepadBtn').style.opacity = '0';
+    document.getElementById('browserBtn').style.opacity = '0';
+    
+    // New Game button - just go to intro
+    newGameBtn.addEventListener('click', () => {
+        playClickSound();
+        startNewGame();
+    });
+    
+    // Load Game button - show existing load panel
+    loadGameBtn.addEventListener('click', () => {
+        playClickSound();
+        hideStartMenu();
+        renderLoadSlots();
+        document.getElementById('loadPanel').classList.add('open');
+    });
+}
+
+function startNewGame() {
+    // Reset all game state
+    kacper_cooked = false;
+    tongyu_salad_shared = false;
+    euan_salad_told = false;
+    marcus_package_received = false;
+    simon_calculator_seen = false;
+    felix_watched = false;
+    leo_coffee_known = false;
+    visitedScenes.clear();
+    dialogueRepetitions = {};
+    currentScene = 'intro';
+    currentCharacter = null;
+    
+    hideStartMenu();
     displayScene();
+}
+
+function hideStartMenu() {
+    const startMenu = document.getElementById('startMenu');
+    startMenu.classList.add('hidden');
+    
+    // Show game elements
+    document.getElementById('progressBar').style.opacity = '1';
+    document.getElementById('fontSizeControls').style.opacity = '1';
+    document.getElementById('settingsBtn').style.opacity = '1';
+    document.getElementById('achievementsBtn').style.opacity = '1';
+    document.getElementById('notepadBtn').style.opacity = '1';
+    document.getElementById('browserBtn').style.opacity = '1';
 }
 
 function playClickSound() {
