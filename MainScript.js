@@ -1296,6 +1296,19 @@ function hideStartMenu() {
     document.getElementById('browserBtn').style.opacity = '1';
 }
 
+function showStartMenu() {
+    const startMenu = document.getElementById('startMenu');
+    startMenu.classList.remove('hidden');
+    
+    // Hide game elements
+    document.getElementById('progressBar').style.opacity = '0';
+    document.getElementById('fontSizeControls').style.opacity = '0';
+    document.getElementById('settingsBtn').style.opacity = '0';
+    document.getElementById('achievementsBtn').style.opacity = '0';
+    document.getElementById('notepadBtn').style.opacity = '0';
+    document.getElementById('browserBtn').style.opacity = '0';
+}
+
 function playClickSound() {
     if (clickSound) {
         clickSound.currentTime = 0;
@@ -1952,6 +1965,12 @@ function setupSaveSystem() {
     loadPanelClose.addEventListener('click', () => {
         playClickSound();
         loadPanel.classList.remove('open');
+        
+        // If start menu is hidden (we're in start menu state), show it again
+        const startMenu = document.getElementById('startMenu');
+        if (startMenu.classList.contains('hidden') && currentScene === 'intro' && visitedScenes.size === 0) {
+            showStartMenu();
+        }
     });
     
     // Close on Escape
@@ -1959,6 +1978,12 @@ function setupSaveSystem() {
         if (e.key === 'Escape') {
             savePanel.classList.remove('open');
             loadPanel.classList.remove('open');
+            
+            // If start menu is hidden and we haven't started the game yet, show it again
+            const startMenu = document.getElementById('startMenu');
+            if (startMenu.classList.contains('hidden') && currentScene === 'intro' && visitedScenes.size === 0) {
+                showStartMenu();
+            }
         }
     });
 }
@@ -2915,7 +2940,7 @@ function setupBrowser() {
                     <strong>⚠️ CRITICAL ALERT:</strong><br>
                     Study camera footage deleted at 11:28 AM from internal IP address.<br>
                     Deletion occurred 2 minutes before footage gap began.<br>
-                    <em>Only Theodore and estate IT personnel have delete permissions...</em>
+                    <em>Only Theodore and estate IT personal have delete permissions...</em>
                 </p>
                 
                 <h2>System Access Log</h2>
