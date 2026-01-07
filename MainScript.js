@@ -29,6 +29,7 @@ let currentTypingCallback = null;
 let buttonsAnimating = false;
 let autoSaveEnabled = true;
 let autoSaveInterval = null;
+let hint_digit = 0
 let achievements = {
     openedNotepad: false,
     openedBrowser: false,
@@ -1718,8 +1719,12 @@ function showAccuseButton() {
     accuseBtn.textContent = 'ACCUSE';
     accuseBtn.onclick = () => {
         playClickSound();
-        currentScene = 'accuse';
-        displayScene();
+        // Show confirmation dialog
+        const confirmed = confirm('Are you sure you want to make an accusation?\n\nThis will end your investigation and close the case.');
+        if (confirmed) {
+            currentScene = 'accuse';
+            displayScene();
+        }
     };
     accuseContainer.appendChild(accuseBtn);
 }
@@ -2989,9 +2994,28 @@ function updateProgressBar() {
     // Check if all characters questioned
     if (count === 30) {
         unlockAchievement('progressBar');
+    } else if (count >= 5 && count < 10){
+        hint_digit = 1
+    } else if (count >= 10 && count < 25){
+        hint_digit = 2
+    } else if (count >= 25){
+        hint_digit = 3
     }
 }
 //endregion
+
+function hint_digit_function(){
+    if (hint_digit == 1) {
+        return "Hint: It might be a good idea to talk with the new cook."
+    } else if (hint_digit == 2) {
+        return "Hint: Tongyu might like the salad that you got."
+    } else if (hint_digit == 3) {
+        return "Hint: Look for contradictions between suspects."
+    } else {
+        return ""
+    }    
+} // unusable function, just there in case game direction switches cuz I'm an idiot
+
 
 //region FONT SIZE CONTROLS
 function setupFontSizeControls() {
