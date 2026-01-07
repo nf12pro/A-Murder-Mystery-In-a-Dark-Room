@@ -16,6 +16,7 @@ let optionsDiv;
 let accuseContainer;
 let currentScene = 'intro';
 let welcomeDiv;
+let leoPicDiv;
 let currentOptions = [];
 let typingTimeout;
 const TYPE_SPEED = 12;
@@ -1456,10 +1457,39 @@ function displayScene() {
         }
         textToType = '\n\nYour aunt was recently found murdered.\nYou are one of the best detectives, you have been handed the case.\n\nWho do you want to interrogate?\n\n';
         showAccuseButton();
+    }if (currentScene === 'leo_pictures') {
+        if (!leoPicDiv) {
+            leoPicDiv = document.createElement('div');
+            leoPicDiv.style.position = 'fixed';
+            leoPicDiv.style.top = '80%';
+            leoPicDiv.style.left = '50%';
+            leoPicDiv.style.transform = 'translate(-50%, -50%)';
+            leoPicDiv.style.zIndex = '999';
+            leoPicDiv.style.textAlign = 'center';
+            leoPicDiv.style.opacity = '0';
+            leoPicDiv.style.transition = 'opacity 0.5s ease-in';
+            const leoPic = document.createElement('img');
+            leoPic.src = 'assets/leo_pics.png';
+            leoPic.alt = 'Leo Pictures';
+            leoPic.style.maxWidth = '25vw';
+            leoPic.style.maxHeight = '25vh';
+            leoPic.style.border = '3px solid #fff';
+            leoPic.style.boxShadow = '0 10px 40px rgba(0,0,0,0.8)';
+            leoPicDiv.appendChild(leoPic);
+            document.body.appendChild(leoPicDiv);
+            setTimeout(() => {
+                leoPicDiv.style.opacity = '1';
+            }, 10);
+        }
+        hideAccuseButton();
     } else {
         if (welcomeDiv) {
             document.body.removeChild(welcomeDiv);
             welcomeDiv = null;
+        }
+        if (leoPicDiv) {
+            document.body.removeChild(leoPicDiv);
+            leoPicDiv = null;
         }
         hideAccuseButton();
     }
