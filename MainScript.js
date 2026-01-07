@@ -2870,13 +2870,242 @@ function setupBrowser() {
                 <h2>Classified Ads</h2>
                 <p><em>"Urgent: Seeking one-way ticket to non-extradition country. Discretion required."</em> - Posted anonymously 2 days before murder</p>
             </div>
+        `,
+        
+        'security-footage.com': `
+            <div class="web-page">
+                <h1>🎥 Security Camera Archive</h1>
+                <p style="font-style: italic;">Estate Security System - Theodore (Security Specialist)</p>
+                
+                <h2>Footage Timeline - Day of Murder</h2>
+                <table>
+                    <tr>
+                        <th>Time</th>
+                        <th>Camera Location</th>
+                        <th>Activity Recorded</th>
+                    </tr>
+                    <tr>
+                        <td>9:15 AM</td>
+                        <td>Front Gate</td>
+                        <td>Tongyu arrives with garden supplies</td>
+                    </tr>
+                    <tr>
+                        <td>10:45 AM</td>
+                        <td>Main Entrance</td>
+                        <td>Vincent enters carrying briefcase</td>
+                    </tr>
+                    <tr class="suspicious">
+                        <td>11:30 AM - 1:15 PM</td>
+                        <td>Study Camera</td>
+                        <td><strong>FOOTAGE MISSING - Data Corruption</strong></td>
+                    </tr>
+                    <tr>
+                        <td>1:30 PM</td>
+                        <td>Back Garden</td>
+                        <td>Derek cleaning pool</td>
+                    </tr>
+                    <tr>
+                        <td>3:47 PM</td>
+                        <td>Front Gate</td>
+                        <td>Marcus delivers mail (No rain visible)</td>
+                    </tr>
+                </table>
+                
+                <p style="margin-top: 20px; padding: 15px; background: #ffe6e6; border-left: 4px solid #d32f2f;">
+                    <strong>⚠️ CRITICAL ALERT:</strong><br>
+                    Study camera footage deleted at 11:28 AM from internal IP address.<br>
+                    Deletion occurred 2 minutes before footage gap began.<br>
+                    <em>Only Theodore and estate IT personnel have delete permissions...</em>
+                </p>
+                
+                <h2>System Access Log</h2>
+                <table>
+                    <tr>
+                        <th>Time</th>
+                        <th>User</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td>11:28 AM</td>
+                        <td>Admin Override</td>
+                        <td>Deleted footage: Study_11-30_to_13-15</td>
+                    </tr>
+                    <tr>
+                        <td>11:29 AM</td>
+                        <td>Admin Override</td>
+                        <td>Cleared deletion logs (FAILED - backup preserved)</td>
+                    </tr>
+                </table>
+            </div>
+        `,
+        
+        'social-media.com': `
+            <div class="web-page">
+                <h1>📱 SocialHub</h1>
+                <p>Recent Posts from Suspects</p>
+                
+                <h2>Timeline - Day of Murder</h2>
+                
+                <div style="background: #f8f9fa; padding: 15px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong>Leo (Motivational Speaker)</strong> - 8:30 AM<br>
+                    "Rise and shine, friends! Today is going to be AMAZING! ☀️ Stay positive! #MondayMotivation"<br>
+                    <span style="color: #666; font-size: 12px;">📍 Coffee Shop Downtown</span>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #43e97b;">
+                    <strong>Heather (Fitness Trainer)</strong> - 10:15 AM<br>
+                    "Morning workout complete! 500 lunges ✅ Never skip leg day! 💪 #FitnessLife"<br>
+                    <span style="color: #666; font-size: 12px;">📍 Downtown Gym</span>
+                </div>
+                
+                <div style="background: #ffe6e6; padding: 15px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #d32f2f;">
+                    <strong>Euan (Accountant)</strong> - 12:00 PM<br>
+                    "Sometimes numbers tell stories people don't want to hear... 📊"<br>
+                    <span style="color: #666; font-size: 12px;">📍 Location Hidden</span><br>
+                    <em style="color: #d32f2f; font-size: 12px;">⚠️ Post deleted at 2:30 PM</em>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #f5576c;">
+                    <strong>Reem (Courier)</strong> - 3:30 PM<br>
+                    "34-stops-done!-Best-delivery-day-ever!-No-traffic-perfect-weather! 🚚✨"<br>
+                    <span style="color: #666; font-size: 12px;">📍 Delivery Route #7</span>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #764ba2;">
+                    <strong>Dev (Santa Impersonator)</strong> - 6:00 PM<br>
+                    "HO HO HO! Charity drive was a success today! Thanks to all donors! 🎅❤️ #SpreadJoy"<br>
+                    <span style="color: #666; font-size: 12px;">📍 Community Center</span>
+                </div>
+                
+                <h2>Suspicious Activity Report</h2>
+                <p style="padding: 10px; background: #fff3cd; border-radius: 5px;">
+                    <strong>Platform Notice:</strong> User "Euan" attempted to permanently delete account at 2:35 PM. 
+                    Request denied due to ongoing legal hold on account data.
+                </p>
+            </div>
+        `,
+        
+        'phone-records.com': `
+            <div class="web-page">
+                <h1>📞 Phone Records Database</h1>
+                <p style="color: #d32f2f; font-weight: bold;">⚠️ CONFIDENTIAL - AUTHORIZED ACCESS ONLY</p>
+                
+                <h2>Call Log - Day of Murder</h2>
+                <table>
+                    <tr>
+                        <th>Time</th>
+                        <th>Caller</th>
+                        <th>Recipient</th>
+                        <th>Duration</th>
+                    </tr>
+                    <tr>
+                        <td>9:00 AM</td>
+                        <td>Your Aunt</td>
+                        <td>Simon (Accountant)</td>
+                        <td>12 min</td>
+                    </tr>
+                    <tr class="suspicious">
+                        <td>10:30 AM</td>
+                        <td>Your Aunt</td>
+                        <td>Euan (Accountant)</td>
+                        <td>27 min</td>
+                    </tr>
+                    <tr>
+                        <td>11:00 AM</td>
+                        <td>Vincent</td>
+                        <td>Your Aunt</td>
+                        <td>3 min</td>
+                    </tr>
+                    <tr class="suspicious">
+                        <td>11:45 AM</td>
+                        <td>Euan</td>
+                        <td>Unknown (Burner Phone)</td>
+                        <td>8 min</td>
+                    </tr>
+                    <tr>
+                        <td>2:15 PM</td>
+                        <td>Rachel</td>
+                        <td>Your Aunt</td>
+                        <td>15 min</td>
+                    </tr>
+                    <tr class="suspicious">
+                        <td>3:00 PM</td>
+                        <td>Your Aunt</td>
+                        <td>Police Department</td>
+                        <td>NOT CONNECTED</td>
+                    </tr>
+                </table>
+                
+                <h2>Text Messages</h2>
+                <div style="background: #f0f0f0; padding: 15px; margin: 15px 0; border-radius: 8px;">
+                    <strong>10:35 AM - Your Aunt → Euan:</strong><br>
+                    "We need to talk about the missing $23,500. I have the bank statements."
+                </div>
+                
+                <div style="background: #ffe6e6; padding: 15px; margin: 15px 0; border-radius: 8px;">
+                    <strong>10:37 AM - Euan → Your Aunt:</strong><br>
+                    "I can explain everything. Please don't go to the police. Give me until tonight."
+                </div>
+                
+                <div style="background: #f0f0f0; padding: 15px; margin: 15px 0; border-radius: 8px;">
+                    <strong>2:55 PM - Your Aunt → Unknown:</strong><br>
+                    "Meeting with lawyer tomorrow at 9 AM. Bringing all evidence."<br>
+                    <em style="color: #d32f2f;">Message never delivered - phone powered off at 2:58 PM</em>
+                </div>
+            </div>
+        `,
+        
+        'antique-registry.com': `
+            <div class="web-page">
+                <h1>🏺 International Antique Registry</h1>
+                <p>Managed by Vincent (Antique Dealer)</p>
+                
+                <h2>Recent Appraisals - Your Aunt's Estate</h2>
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Appraised Value</th>
+                        <th>Date</th>
+                        <th>Appraiser</th>
+                    </tr>
+                    <tr>
+                        <td>Ming Dynasty Vase</td>
+                        <td>$45,000</td>
+                        <td>2 months ago</td>
+                        <td>Vincent</td>
+                    </tr>
+                    <tr>
+                        <td>Victorian Jewelry Collection</td>
+                        <td>$32,000</td>
+                        <td>2 months ago</td>
+                        <td>Vincent</td>
+                    </tr>
+                    <tr class="suspicious">
+                        <td>Rare Manuscript Set</td>
+                        <td>$8,000 → $85,000</td>
+                        <td>3 days before murder</td>
+                        <td>Vincent (Re-appraised)</td>
+                    </tr>
+                </table>
+                
+                <h2>Insurance Claims</h2>
+                <p style="padding: 15px; background: #fff3cd; border-radius: 5px; margin-top: 20px;">
+                    <strong>Notice:</strong> Vincent filed updated insurance valuations for estate 3 days before incident.<br>
+                    Total insured value increased from $180,000 to $425,000.<br>
+                    <em>Estate beneficiary changed to Vincent on same day...</em>
+                </p>
+                
+                <h2>Market Watch</h2>
+                <p>Vincent has been monitoring rare manuscript auctions in offshore markets.<br>
+                Last search: "How to sell inherited items without probate"</p>
+            </div>
         `
     };
     
     function loadHomepage() {
         browserContent.innerHTML = `
             <div class="web-page">
-                <h1>🌐 WebExplorer Home</h1>
+                <h1>🌐 Internet Explorer</h1>
                 <p style="text-align: center; color: #666; margin-bottom: 30px;">Browse available websites to gather evidence</p>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
@@ -2903,6 +3132,26 @@ function setupBrowser() {
                     <div class="website-widget" onclick="loadBrowserPage('news-daily.com')" style="cursor: pointer; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                         <h3 style="margin: 0 0 10px 0; color: white;">📰 News Daily</h3>
                         <p style="margin: 0; font-size: 14px; opacity: 0.9;">Local news articles and investigations</p>
+                    </div>
+                    
+                    <div class="website-widget" onclick="loadBrowserPage('security-footage.com')" style="cursor: pointer; background: linear-gradient(135deg, #ff6b6b 0%, #c92a2a 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">🎥 Security Footage</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Camera archive and access logs</p>
+                    </div>
+                    
+                    <div class="website-widget" onclick="loadBrowserPage('social-media.com')" style="cursor: pointer; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">📱 Social Media</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Posts and activity from suspects</p>
+                    </div>
+                    
+                    <div class="website-widget" onclick="loadBrowserPage('phone-records.com')" style="cursor: pointer; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">📞 Phone Records</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Call logs and text messages</p>
+                    </div>
+                    
+                    <div class="website-widget" onclick="loadBrowserPage('antique-registry.com')" style="cursor: pointer; background: linear-gradient(135deg, #d4a373 0%, #8b6f47 100%); padding: 20px; border-radius: 10px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="margin: 0 0 10px 0; color: white;">🏺 Antique Registry</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Appraisals and insurance valuations</p>
                     </div>
                 </div>
                 

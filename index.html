@@ -769,36 +769,66 @@
         }
         #browserControls {
             display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #453B61 0%, #362d4d 100%);
+            border-radius: 10px;
+            align-items: center;
         }
         .browser-nav {
-            width: 40px;
-            padding: 8px;
-            background-color: #453B61;
+            width: 45px;
+            height: 45px;
+            padding: 0;
+            background-color: rgba(255,255,255,0.1);
             color: #fff;
-            border: 1px solid #fff;
-            border-radius: 5px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
             cursor: pointer;
             opacity: 1 !important;
-            font-size: 16px;
+            font-size: 18px;
             margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
         }
-        .browser-nav:hover {
-            background-color: #362d4d;
+        .browser-nav:hover:not(:disabled) {
+            background-color: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+            transform: scale(1.05);
+        }
+        .browser-nav:disabled {
+            opacity: 0.3 !important;
+            cursor: not-allowed;
         }
         #browserAddress {
             flex: 1;
-            padding: 8px 12px;
+            padding: 12px 15px;
             background: #fff;
             color: #333;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
             font-family: 'PT Sans', sans-serif;
-            font-size: 14px;
+            font-size: 15px;
+            transition: border-color 0.2s ease;
+        }
+        #browserAddress:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        #browserGo {
+            padding: 12px 25px !important;
+            background-color: #667eea !important;
+            border: 2px solid #667eea !important;
+            width: auto !important;
+            height: auto !important;
+            font-weight: bold;
+        }
+        #browserGo:hover {
+            background-color: #5568d3 !important;
+            transform: scale(1.05) !important;
         }
         #browserContent {
             width: 100%;
