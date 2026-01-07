@@ -110,7 +110,7 @@ const scenes = {
         ]
     },
     kacper_alibi: {
-        text: 'Kacper says he was in the kitchen all day ordering salad from Glovo because he can\'t cook.\n\n',
+        text: 'Kacper says he was in the kitchen all day ordering salad from Uber Eats because he can\'t cook.\n\n',
         options: [
             { text: 'Ask about the murder weapon', nextScene: 'kacper_weapon' },
             { text: 'Back to Kacper', nextScene: 'kacper' },
@@ -126,7 +126,7 @@ const scenes = {
         ]
     },
     kacper_meal: {
-        text: 'Kacper gives you the tomato salad he ordered from Glovo.\n\n',
+        text: 'Kacper gives you the tomato salad he ordered from Uber Eats.\n\n',
         options: [
             { text: 'Ask about his alibi', nextScene: 'kacper_alibi' },
             { text: 'Back to Kacper', nextScene: 'kacper' },
