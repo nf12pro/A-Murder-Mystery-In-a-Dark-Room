@@ -5,7 +5,7 @@ Text-based murder mistery game where you have to find the murderer using your br
 [https://nf12pro.github.io/A-Murder-Mystery-In-a-Dark-Room/
 ](https://nf12pro.github.io/Midnight-A-Murder-Mistery/)
 
-#Licenses:
+# Licenses:
 For the emojis:
 Copyright (c) 2019-2026, the SerenityOS developers.
 All rights reserved.
