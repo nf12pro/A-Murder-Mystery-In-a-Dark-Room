@@ -1,6 +1,33 @@
 # A Murder Mystery In a Dark Room
-Text-based murder mistery game where you have to find the murderer using your bright detective skills, will you succeed and catch the real murderer or will they get away? Filled with 30 available suspects, each having unique dialogue and even some HackClub staff. 
+Text-based murder mistery game where you have to find the murderer using your bright detective skills, will you succeed and catch the real murderer or will they get away? Filled with 30 available suspects, each having unique dialogue and even some HackClub staff. The style is heavily inspired by the official HackClub Midnight website: https://midnight.hackclub.com/
 
 # To play check out:
 [https://nf12pro.github.io/A-Murder-Mystery-In-a-Dark-Room/
 ](https://nf12pro.github.io/Midnight-A-Murder-Mistery/)
+
+#Licenses:
+For the emojis:
+Copyright (c) 2019-2026, the SerenityOS developers.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
