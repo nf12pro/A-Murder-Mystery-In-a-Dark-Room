@@ -1792,12 +1792,8 @@ function showAccuseButton() {
     accuseBtn.textContent = 'ACCUSE';
     accuseBtn.onclick = () => {
         playClickSound();
-        // Show confirmation dialog
-        const confirmed = confirm('Are you sure you want to make an accusation?\n\nThis will end your investigation and close the case.');
-        if (confirmed) {
-            currentScene = 'accuse';
-            displayScene();
-        }
+        currentScene = 'accuse';
+        displayScene();
     };
     accuseContainer.appendChild(accuseBtn);
 }
